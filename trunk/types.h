@@ -2,6 +2,7 @@
 #define _TYPES_H_
 
 #include <pair>
+#include <list>
 
 using namespace std;
 
@@ -21,5 +22,12 @@ typedef pair<pair<int, int>, byte> cod77;
  * de la tabla.
  */
 typedef pair<int, byte> cod78;
+
+/**
+ * Codificación del LZW
+ * Se corresponde con la tripleta: (i, cod(a))
+ */
+typedef unsigned int codw; 
+
 
 #endif

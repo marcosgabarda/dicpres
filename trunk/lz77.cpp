@@ -1,5 +1,9 @@
 #include "lz77.h"
 
+lz77::lz77(int nVentana) {
+  m_nVentana = nVentana;
+}
+
 void lz77::readFile(string sFile) {
 
   ifstream file(sFile.c_str(), ifstream::binary);
@@ -14,3 +18,4 @@ void lz77::readFile(string sFile) {
   file.close(); 
 
 }
+
