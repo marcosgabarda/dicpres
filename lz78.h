@@ -25,17 +25,28 @@ class lz78 {
    */
   int iComp;
 
+  byte readChar();
 
   /**
    * Tabla donde se almacena cada una de las entradas de pares codificantes.
    */
   vector<cod78> vTablaCod;
 
+  /**
+   * Mapa donde se almacena una relación lista de chars - indice.
+   * El índice se utilizará para acceder al vector vTablaCod sin recorrerlo. 
+   */
+  map<list<byte>,int> mTablaCod;
+
+  /**
+   * Índice del mapa y del vector
+   */
+  int iIndice;
+
  public:
   lz78(); 
-  ~lz78();
-
   void readFile (string sFile);
+  void compress (string sFile);
 
 };
 
