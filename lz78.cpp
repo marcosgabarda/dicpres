@@ -64,3 +64,50 @@ void lz78::compress(string sFile){
   }
   file.close();
 }
+
+void lz78::readCom(string sFile) {
+
+  ifstream file(sFile.c_str(), ifstream::binary);
+  int indi;
+  char buffer[2];
+
+  while (!file.read(buffer, 2).eof()) {
+    indi = static_cast<int>(buffer[0]);
+    vTablaCod.push_back(cod78(indi,buffer[1]));
+  }
+
+  file.close(); 
+}
+
+void lz78::obtainElem(list<byte> &cadena, unsigned int i){
+  if(vTablaCod[i].first==0){
+    cadena.push_back(vTablaCod[i].second);
+    return;
+  }
+  else{
+    obtainElem(cadena,vTablaCod[i].first-1);
+    cadena.push_back(vTablaCod[i].second);
+    return;
+  }
+}
+
+/**
+ * Método que descomprime un fichero LZ78.
+ * \param sFile Dirección donde se dejara el fichero descomprimido.
+ */
+void lz78::uncompress(string sFile){
+  list <byte> cadena;
+  ofstream file(sFile.c_str(), ofstream::binary);
+
+  for(unsigned int i=0; i< vTablaCod.size(); i++){
+    obtainElem(cadena,i);
+    for(list<byte>::iterator it = cadena.begin(); it!=cadena.end(); it++){
+      char buffer[1];
+      buffer[0]=static_cast<char>(*it);
+      file.write(buffer,1);
+    }
+    cadena.clear();
+  }
+
+  file.close();
+}
