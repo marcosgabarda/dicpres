@@ -1,4 +1,3 @@
-#include <string>
 #include "utils.h"
 
 /**
@@ -9,12 +8,12 @@
  * \param sSecuencia string
  * \return unsigned char
  */
-unsigned char bin2char(string sSecuencia) {
+byte bin2char(string sSecuencia) {
 
   if (sSecuencia.size() != 8) return '\0';
 
   int nLongitud = static_cast<int>(sSecuencia.size());
-  unsigned int nSum = 0;
+  byte nSum = 0;
   for (int i = 0; i < nLongitud; i++) {
     unsigned char c = sSecuencia[i];
     int n = 0;
@@ -25,8 +24,8 @@ unsigned char bin2char(string sSecuencia) {
     }    
     nSum += static_cast<unsigned int>(n*pow(2.0, (nLongitud - 1) - i));
   }
-  unsigned char cOcteto;
-  cOcteto = static_cast<unsigned char>(nSum);
+  byte cOcteto;
+  cOcteto = static_cast<byte>(nSum);
   return cOcteto;
 }
 
@@ -37,10 +36,10 @@ unsigned char bin2char(string sSecuencia) {
  * \param cData unsigned char
  * \return string
  */
-string char2bin(unsigned char cData) {
+string char2bin(byte cData) {
   string sBuffer;
-  for (unsigned char i = cData; i > 1; i/=2) {
-    unsigned char nResto = i%2;
+  for (byte i = cData; i > 1; i/=2) {
+    byte nResto = i%2;
     if (nResto == 0) {
       sBuffer.push_back('0');
     } else {
@@ -53,4 +52,10 @@ string char2bin(unsigned char cData) {
   for (int i = 0; i < (8 - nLongitud); i++ ) sBufferFinal.push_back('0');
   for(int i = nLongitud - 1; i >= 0; i-- ) sBufferFinal.push_back(sBuffer[i]);
   return sBufferFinal;
+}
+
+void debug(const char* buffer) {
+  #ifdef DEBUG
+  cout << buffer << endl;
+  #endif
 }

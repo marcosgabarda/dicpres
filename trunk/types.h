@@ -1,8 +1,12 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
-#include <pair>
+#include <map>
 #include <list>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <cmath>
 
 using namespace std;
 
