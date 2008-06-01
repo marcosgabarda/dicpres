@@ -113,20 +113,25 @@ void lzw::compress (string sFileIn, string sFileOut) {
   }
 
   debug(string("Simbolos del diccionario tras comprimir: "));
-  debug(static_cast<unsigned int>(m_vTablaCodInv.size()));
 
-  file << static_cast<unsigned int>(m_vTablaCod.size());
+  unsigned int nTabla = static_cast<unsigned int>(m_vTablaCod.size());
+  debug(nTabla);
+
+  file << nTabla << " ";
   for(map<codw, list<byte> >::iterator itTabla = m_vTablaCod.begin();
       itTabla != m_vTablaCod.end();
       itTabla++) {
-	file << itTabla->first;
-	file << static_cast<unsigned int>(itTabla->second.size());
-	for(list<byte>::iterator itList = itTabla->second.begin();
-	    itList != itTabla->second.end();
-	    itList++) {
-	  file << *itList;
-	}
-	
+    unsigned int nBytes = static_cast<unsigned int>(itTabla->second.size());
+    codw iIndex = itTabla->first;
+    file << iIndex;
+    file << nBytes;
+    for(list<byte>::iterator itList = itTabla->second.begin();
+	itList != itTabla->second.end();
+	itList++) {
+      byte b = *itList;
+      file << b;
+    }
+    
   }
 
   int n = static_cast<int>(vBufferSalida.size());
@@ -142,6 +147,8 @@ void lzw::compress (string sFileIn, string sFileOut) {
 
 void lzw::uncompress (string sFileIn, string sFileOut) {
   
+  debug("### INICIO DESCOMPRESION ###");
+
   init();
 
   ifstream fileIn(sFileIn.c_str(), ifstream::binary);
@@ -153,6 +160,10 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
   unsigned int nSizeTabla;
   fileIn >> nSizeTabla;
 
+  debug("Tam. de la tabla:");
+  debug(nSizeTabla);
+
+  debug("Leyendo tabla...");
   for (unsigned int i = 0; i < nSizeTabla; i++) {
     codw iIndex;
     unsigned int nBytes;
@@ -167,9 +178,12 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
     m_vTablaCod[iIndex] = tmp;
     m_vTablaCodInv[tmp] = iIndex;
   }
-  
-  codw iCodigo;
-  while((fileIn >> iCodigo)) {
+  debug("FIN");
+
+  debug("Leyendo fichero...");
+  while(!fileIn.eof()) {
+    codw iCodigo;
+    fileIn >> iCodigo;
     list<byte> lTmp = m_vTablaCod[iCodigo];
     for (list<byte>::iterator it = lTmp.begin();
 	 it != lTmp.end();
@@ -179,8 +193,11 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
       fileOut.write(buffer, 1);
     }
   }
+  debug("FIN");
 
   fileIn.close();
   fileOut.close();
   
+  debug("### FIN DESCOMPRESION ###");
+
 }
