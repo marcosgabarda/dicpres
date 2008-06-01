@@ -34,4 +34,4 @@ lz78.o:
 	$(CXX) -c lz78.cpp $(CXXFLAGS)
 
 clean:
-	$(RM) -f *~ test_lzw *.o
+	$(RM) *~ test_lzw test_lz78 untest_lz78 untest_lzw *.o
