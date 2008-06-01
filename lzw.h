@@ -32,11 +32,13 @@ class lzw {
   map<codw, list<byte> > m_vTablaCod;
   map<list<byte>, codw> m_vTablaCodInv;
 
+  byte readChar();
+
  public:
   lzw(); 
-  ~lzw();
 
   void readFile (string sFile);
+  void compress (string sFile);
 
 };
 
