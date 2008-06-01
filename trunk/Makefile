@@ -9,7 +9,7 @@ test_lzw: utils.o lzw.o
 	$(CXX) test_lzw.cpp utils.o lzw.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 test_lz78: utils.o lz78.o
-	$(CXX) test_lzw.cpp utils.o lzw.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
+	$(CXX) test_lz78.cpp utils.o lz78.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 utils.o:
 	$(CXX) -c utils.cpp $(CXXFLAGS)
