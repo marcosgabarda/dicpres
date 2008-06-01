@@ -8,13 +8,16 @@ DEBUG=-g
 all:
 	$(error "### Funciones principales sin implementar ###")
 
-test: test_lzw test_lz78
+test: test_lzw test_lz78 untest_lz78
 
 test_lzw: utils.o lzw.o
 	$(CXX) test_lzw.cpp utils.o lzw.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 test_lz78: utils.o lz78.o
 	$(CXX) test_lz78.cpp utils.o lz78.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
+
+untest_lz78: utils.o lz78.o
+	$(CXX) untest_lz78.cpp utils.o lz78.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 utils.o:
 	$(CXX) -c utils.cpp $(CXXFLAGS)

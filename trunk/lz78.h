@@ -47,6 +47,10 @@ class lz78 {
   lz78(); 
   void readFile (string sFile);
   void compress (string sFile);
+  void readCom (string sFile);
+  void uncompress (string sFile);
+
+  void obtainElem(list<byte> &cadena, unsigned int i);
 
 };
 
