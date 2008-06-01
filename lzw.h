@@ -18,13 +18,15 @@ class lzw {
   /**
    * Buffer que contiene todo el fichero leido
    */
-  vector<byte> vBuffer;
+  vector<byte> m_vBuffer;
 
   /**
    * Índice de compresión
    */
-  int iComp;
+  int m_iComp;
 
+
+  bool m_bVerbose;
 
   /**
    * Tabla donde se almacena cada una de las entradas de pares codificantes.
@@ -34,8 +36,12 @@ class lzw {
 
   byte readChar();
 
+  void debug(const char* buffer);
+  void debug(string buffer);
+
  public:
-  lzw(); 
+  
+  lzw(bool bVerbose = false); 
 
   void readFile (string sFile);
   void compress (string sFile);

@@ -1,15 +1,25 @@
 #include "lzw.h"
 #include "utils.h"
 
-lzw::lzw() {
-  iComp = -1;
+lzw::lzw(bool bVerbose) {
+  m_iComp = -1;
+  m_bVerbose = bVerbose;
 }
 
 byte lzw::readChar() {
-  int n = static_cast<int>(vBuffer.size());
-  iComp++;
-  if (n == 0 || iComp >= n || iComp < 0) return 0;
-  return vBuffer[iComp];
+  int n = static_cast<int>(m_vBuffer.size());
+  m_iComp++;
+  if (n == 0 || m_iComp >= n || m_iComp < 0) return 0;
+  return m_vBuffer[m_iComp];
+}
+
+void lzw::debug(const char* buffer) {
+  if (m_bVerbose)
+    cout << "[Debug] "<< buffer;
+}
+void lzw::debug(string buffer) {
+  if (m_bVerbose)
+    cout << "[Debug] "<< buffer << endl;
 }
 
 /**
@@ -18,7 +28,8 @@ byte lzw::readChar() {
  * \param sFile Dirección donde se encuentra el fichero a comprimir.
  */
 void lzw::readFile (string sFile) {
-
+  
+  debug(string("Fichero de entrada: ") + sFile );
   ifstream file(sFile.c_str(), ifstream::binary);
   byte cCaracter;
   char buffer[1];
@@ -26,7 +37,7 @@ void lzw::readFile (string sFile) {
   while (!file.read(buffer, 1).eof()) {
     cCaracter = static_cast<byte>(buffer[0]);
     
-    vBuffer.push_back(cCaracter);
+    m_vBuffer.push_back(cCaracter);
 
     list<byte> tmp;
     tmp.push_back(cCaracter);
@@ -49,6 +60,7 @@ void lzw::readFile (string sFile) {
  */
 void lzw::compress (string sFile) {
   
+  debug(string("Fichero de salida: ") + sFile );
   ofstream file(sFile.c_str(), ofstream::binary);
 
   list<byte> sCadena;
