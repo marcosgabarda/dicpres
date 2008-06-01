@@ -6,7 +6,6 @@ int main(int argc, char *argv[]) {
   lzw tmp(true);
   string sIn(argv[1]);
   string sOut(sIn + ".lzw");
-  tmp.readFile(sIn);
-  tmp.compress(sOut);
+  tmp.compress(sIn, sOut);
   return 0;
 }

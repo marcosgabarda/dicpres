@@ -34,17 +34,21 @@ class lzw {
   map<codw, list<byte> > m_vTablaCod;
   map<list<byte>, codw> m_vTablaCodInv;
 
+  void init();
+
   byte readChar();
+  void readSource (string sFile);
 
   void debug(const char* buffer);
   void debug(string buffer);
+  void debug(int buffer);
 
  public:
   
   lzw(bool bVerbose = false); 
 
-  void readFile (string sFile);
-  void compress (string sFile);
+  void compress (string sFileIn, string sFileOut);
+  void uncompress (string sFileIn, string sFileOut);
 
 };
 
