@@ -53,9 +53,3 @@ string char2bin(byte cData) {
   for(int i = nLongitud - 1; i >= 0; i-- ) sBufferFinal.push_back(sBuffer[i]);
   return sBufferFinal;
 }
-
-void debug(const char* buffer) {
-  #ifdef DEBUG
-  cout << buffer << endl;
-  #endif
-}

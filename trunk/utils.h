@@ -5,6 +5,5 @@
 
 byte bin2char(string sSecuencia);
 string char2bin(byte cData);
-void debug(const char *buffer);
 
 #endif

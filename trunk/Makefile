@@ -5,6 +5,11 @@ LIBS=lib
 LDLIBS=-lm
 DEBUG=-g
 
+all:
+	$(error "### Funciones principales sin implementar ###")
+
+test: test_lzw test_lz78
+
 test_lzw: utils.o lzw.o
 	$(CXX) test_lzw.cpp utils.o lzw.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
