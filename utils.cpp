@@ -53,3 +53,20 @@ string char2bin(byte cData) {
   for(int i = nLongitud - 1; i >= 0; i-- ) sBufferFinal.push_back(sBuffer[i]);
   return sBufferFinal;
 }
+
+vector<byte> codw2byte(codw Codigo) {
+  int n = static_cast<int>(sizeof(codw));
+
+  codw MASK = 0xf;
+
+  vector<byte> vResult(n);
+
+  for (int i = 0; i < n; i++) {
+    byte tmp = static_cast<byte>(Codigo & MASK);
+    vResult[n - i - 1] = tmp;
+    Codigo = Codigo >> 4;
+  }
+
+  return vResult;
+  
+}

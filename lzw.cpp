@@ -19,6 +19,16 @@ byte lzw::readChar() {
   return m_vBuffer[m_iComp];
 }
 
+void lzw::writeCodw (ofstream &File, codw Codigo) {
+  vector<byte> aux = codw2byte(Codigo);
+  int n = static_cast<int>(aux.size());
+  for (int i = 0; i < n; i++) {
+    char buffer[1];
+    buffer[0] = static_cast<char>(aux[i]);
+    File.write(buffer, 1);
+  }
+}
+
 void lzw::debug(const char* buffer) {
   if (m_bVerbose)
     cout << "[Debug] "<< buffer << endl;
@@ -117,26 +127,30 @@ void lzw::compress (string sFileIn, string sFileOut) {
   unsigned int nTabla = static_cast<unsigned int>(m_vTablaCod.size());
   debug(nTabla);
 
-  file << nTabla << " ";
+  writeCodw(file, nTabla);
   for(map<codw, list<byte> >::iterator itTabla = m_vTablaCod.begin();
       itTabla != m_vTablaCod.end();
       itTabla++) {
     unsigned int nBytes = static_cast<unsigned int>(itTabla->second.size());
     codw iIndex = itTabla->first;
-    file << iIndex;
-    file << nBytes;
+    writeCodw(file, iIndex);
+    writeCodw(file, nBytes);
     for(list<byte>::iterator itList = itTabla->second.begin();
 	itList != itTabla->second.end();
 	itList++) {
       byte b = *itList;
-      file << b;
+      char buffer[1];
+      buffer[0] = static_cast<char>(b);
+      file.write(buffer, 1);
     }
     
   }
 
   int n = static_cast<int>(vBufferSalida.size());
   for (int i = 0; i < n; i++) {
-    file << vBufferSalida[i];
+    char buffer[1];
+    buffer[0] = static_cast<char>(vBufferSalida[i]);
+    file.write(buffer, 1);
   }
 
   file.close();
