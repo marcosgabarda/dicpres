@@ -56,17 +56,22 @@ string char2bin(byte cData) {
 
 vector<byte> codw2byte(codw Codigo) {
   int n = static_cast<int>(sizeof(codw));
-
-  codw MASK = 0xf;
-
+  codw MASK = 0xff;
   vector<byte> vResult(n);
-
   for (int i = 0; i < n; i++) {
     byte tmp = static_cast<byte>(Codigo & MASK);
+    Codigo = Codigo >> 8;
     vResult[n - i - 1] = tmp;
-    Codigo = Codigo >> 4;
   }
+  return vResult;  
+}
 
-  return vResult;
-  
+codw byte2codw(vector<byte> Codigo) {
+  int n = static_cast<int>(Codigo.size());
+  codw res = 0;
+  for (int i = 0; i < n; i++) {
+    res = res << 8;
+    res = res | Codigo[i];
+  }
+  return res;
 }

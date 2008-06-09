@@ -23,10 +23,23 @@ void lzw::writeCodw (ofstream &File, codw Codigo) {
   vector<byte> aux = codw2byte(Codigo);
   int n = static_cast<int>(aux.size());
   for (int i = 0; i < n; i++) {
+    char c = static_cast<char>(aux[i]);
     char buffer[1];
-    buffer[0] = static_cast<char>(aux[i]);
+    buffer[0] = c ;
     File.write(buffer, 1);
   }
+}
+
+codw lzw::readCodw (ifstream &File) {
+  int n = sizeof(codw);
+  vector<byte> tmp;
+  for (int i = 0; i < n; i++) {
+    char buffer[1];
+    File.read(buffer, 1);
+    tmp.push_back(static_cast<byte>(buffer[0]));
+  }
+  codw cod = byte2codw(tmp);
+  return cod;
 }
 
 void lzw::debug(const char* buffer) {
@@ -98,6 +111,7 @@ void lzw::compress (string sFileIn, string sFileOut) {
   list<byte> sCadena;
   byte cCaracter;
   while ((cCaracter = readChar())) {
+    debug(cCaracter);
     list<byte> sTmp(sCadena);
     sTmp.push_back(cCaracter);
     if (m_vTablaCodInv.find(sTmp) != m_vTablaCodInv.end()) {
@@ -122,12 +136,16 @@ void lzw::compress (string sFileIn, string sFileOut) {
     }
   }
 
+  debug("Indices leidos: ");
+  debug(vBufferSalida.size());
+
   debug(string("Simbolos del diccionario tras comprimir: "));
 
   unsigned int nTabla = static_cast<unsigned int>(m_vTablaCod.size());
   debug(nTabla);
 
   writeCodw(file, nTabla);
+
   for(map<codw, list<byte> >::iterator itTabla = m_vTablaCod.begin();
       itTabla != m_vTablaCod.end();
       itTabla++) {
@@ -148,11 +166,12 @@ void lzw::compress (string sFileIn, string sFileOut) {
 
   int n = static_cast<int>(vBufferSalida.size());
   for (int i = 0; i < n; i++) {
-    char buffer[1];
-    buffer[0] = static_cast<char>(vBufferSalida[i]);
-    file.write(buffer, 1);
+    writeCodw(file, vBufferSalida[i]);
   }
 
+  debug("N. de indices escritos: ");
+  debug(n);
+  
   file.close();
 
   debug("### FIN COMPRESION ###");
@@ -172,9 +191,9 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
    * Leer la tabla de compresion.
    */
   unsigned int nSizeTabla;
-  fileIn >> nSizeTabla;
+  nSizeTabla = readCodw(fileIn);
 
-  debug("Tam. de la tabla:");
+  debug("Tam. de la tabla guardado en fichero:");
   debug(nSizeTabla);
 
   debug("Leyendo tabla...");
@@ -182,11 +201,13 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
     codw iIndex;
     unsigned int nBytes;
     list<byte> tmp;
-    fileIn >> iIndex;
-    fileIn >> nBytes;
+    iIndex = readCodw(fileIn);
+    nBytes = readCodw(fileIn);
     for (unsigned int j = 0; j < nBytes; j++) {
       byte b;
-      fileIn >> b;
+      char buffer[1];
+      fileIn.read(buffer, 1);
+      b = static_cast<byte>(buffer[0]);
       tmp.push_back(b);
     }
     m_vTablaCod[iIndex] = tmp;
@@ -194,10 +215,17 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
   }
   debug("FIN");
 
+  debug("Tam. de la tabla:");
+  debug(static_cast<int>(m_vTablaCod.size()));
+
   debug("Leyendo fichero...");
-  while(!fileIn.eof()) {
+  int n = 0;
+  do {
     codw iCodigo;
-    fileIn >> iCodigo;
+
+    iCodigo = readCodw(fileIn);
+    n++;
+
     list<byte> lTmp = m_vTablaCod[iCodigo];
     for (list<byte>::iterator it = lTmp.begin();
 	 it != lTmp.end();
@@ -206,8 +234,11 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
       buffer[0] = static_cast<char>(*it);
       fileOut.write(buffer, 1);
     }
-  }
+  }  while(!fileIn.eof());
   debug("FIN");
+
+  debug("N. de indices leidos: ");
+  debug(n);
 
   fileIn.close();
   fileOut.close();

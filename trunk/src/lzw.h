@@ -38,6 +38,8 @@ class lzw {
 
   byte readChar();
   void readSource (string sFile);
+
+  codw readCodw (ifstream &File);
   void writeCodw (ofstream &File, codw Codigo);
 
   void debug(const char* buffer);
