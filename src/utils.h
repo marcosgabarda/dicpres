@@ -7,5 +7,6 @@ byte bin2char(string sSecuencia);
 string char2bin(byte cData);
 
 vector<byte> codw2byte(codw Codigo);
+codw byte2codw(vector<byte> Codigo);
 
 #endif
