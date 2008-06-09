@@ -75,3 +75,71 @@ codw byte2codw(vector<byte> Codigo) {
   }
   return res;
 }
+
+/**
+ * Convierte de un binario, representado por una cadena de caracteres 0 y 1, a un 
+ * entero, con la codificacion correspondiente en binario real. La secuencia
+ * tiene que ser exactamente de 32 caracteres.
+ * \author Iván Rodriguez Sastre & Marcos Gabarda Inat
+ * \param sSecuencia string
+ * \return unsigned char
+ */
+int bin2int(string sSecuencia) {
+
+  int nLongitud = static_cast<int>(sSecuencia.size());
+  int nSum = 0;
+  
+  if (nLongitud != 32) return -1;
+
+  for (int i = 0; i < nLongitud; i++) {
+    unsigned char c = sSecuencia[i];
+    int n = 0;
+    if (c == '0') {
+      n = 0;
+    } else if (c == '1'){
+      n = 1;
+    }    
+    nSum += static_cast<int>(n*pow(2.0, (static_cast<double>(nLongitud) - 1) - i));
+  }
+
+  return nSum;
+}
+
+/**
+ * Convierte de un unsigned int a un binario, representado por una 
+ * cadena de 0's y 1's, con la codificacion correspondiente en binario real
+ * de tamaño 32.
+ * \author Iván Rodriguez Sastre & Marcos Gabarda Inat
+ * \param cData unsigned char
+ * \return string
+ */
+string int2bin(int iData) {
+  string sBuffer;
+  string sBufferFinal;
+
+  if(iData==0){
+    for (int i = 0; i < 32; i++ )
+      sBufferFinal.push_back('0');
+    return sBufferFinal;
+  }
+
+  else{
+
+    for (int i = iData; i > 1; i/=2) {
+      int nResto = i%2;
+      if (nResto == 0) {
+	sBuffer.push_back('0');
+      } else {
+	sBuffer.push_back('1');
+      }
+    }
+    sBuffer.push_back('1');
+  
+    int nLongitud = static_cast<int>(sBuffer.size());
+    for (int i = 0; i < (32 - nLongitud); i++ )
+      sBufferFinal.push_back('0');
+    for(int i = nLongitud - 1; i >= 0; i-- )
+      sBufferFinal.push_back(sBuffer[i]);
+    return sBufferFinal;
+  }
+}
