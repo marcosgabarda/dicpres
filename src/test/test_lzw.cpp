@@ -1,4 +1,4 @@
-#include "lzw.h"
+#include "../lzw.h"
 
 using namespace std;
 
