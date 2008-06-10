@@ -46,6 +46,8 @@ class lzw {
   void debug(string buffer);
   void debug(int buffer);
 
+  static const unsigned int iLimit = 256;
+
  public:
   
   lzw(bool bVerbose = false); 

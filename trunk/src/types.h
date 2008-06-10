@@ -16,7 +16,7 @@ typedef unsigned char byte;
  * Codificación del LZ77
  * Se corresponde con la tripleta: (d, |x|, cod(a))
  */
-typedef pair<pair<int, int>, byte> cod77; 
+typedef pair<pair<unsigned int, unsigned int>, byte> cod77; 
 
 /**
  * Codificación del LZ78

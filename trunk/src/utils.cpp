@@ -43,24 +43,21 @@ string char2bin(byte cData) {
     for (int i = 0; i < 8; i++ )
       sBufferFinal.push_back('0');
     return sBufferFinal;
-  }
-
-  else{
-  
-	  for (byte i = cData; i > 1; i/=2) {
-		  byte nResto = i%2;
-		  if (nResto == 0) {
-			  sBuffer.push_back('0');
-		  } else {
+  } 
+  else{    
+    for (byte i = cData; i > 1; i/=2) {
+      byte nResto = i%2;
+      if (nResto == 0) {
+	sBuffer.push_back('0');
+      } else {
 			  sBuffer.push_back('1');
-		  }
-	  }
-	  sBuffer.push_back('1');
-
-	  int nLongitud = static_cast<int>(sBuffer.size());
-	  for (int i = 0; i < (8 - nLongitud); i++ ) sBufferFinal.push_back('0');
-	  for(int i = nLongitud - 1; i >= 0; i-- ) sBufferFinal.push_back(sBuffer[i]);
-	  return sBufferFinal;
+      }
+    }
+    sBuffer.push_back('1');    
+    int nLongitud = static_cast<int>(sBuffer.size());
+    for (int i = 0; i < (8 - nLongitud); i++ ) sBufferFinal.push_back('0');
+    for(int i = nLongitud - 1; i >= 0; i-- ) sBufferFinal.push_back(sBuffer[i]);
+    return sBufferFinal;
   }
 }
 
@@ -68,18 +65,28 @@ vector<byte> codw2byte(codw Codigo) {
   int n = static_cast<int>(sizeof(codw));
   codw MASK = 0xff;
   vector<byte> vResult(n);
+  vector<byte> vResultFinal;
   for (int i = 0; i < n; i++) {
     byte tmp = static_cast<byte>(Codigo & MASK);
     Codigo = Codigo >> 8;
     vResult[n - i - 1] = tmp;
   }
-  return vResult;  
+  bool flag = false;
+  for (int i = 0; i < n; i++) {
+    if (!flag && vResult[i] != 0)
+      flag = true;
+    if (flag)
+      vResultFinal.push_back(vResult[i]);
+  }
+  byte size = static_cast<byte>(vResultFinal.size());
+  vResultFinal.insert(vResultFinal.begin(), size);
+  return vResultFinal;  
 }
 
 codw byte2codw(vector<byte> Codigo) {
-  int n = static_cast<int>(Codigo.size());
+  int n = static_cast<int>(Codigo[0]);
   codw res = 0;
-  for (int i = 0; i < n; i++) {
+  for (int i = 1; i < n; i++) {
     res = res << 8;
     res = res | Codigo[i];
   }
