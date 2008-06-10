@@ -15,18 +15,18 @@ dicpres: utils.o lzw.o lz78.o
 test: test_lzw test_lz78 untest_lzw untest_lz78
 
 test_lzw: utils.o lzw.o
-	$(CXX) $(SOURCES)/test_lzw.cpp $(LIBS)/utils.o $(LIBS)/lzw.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
+	$(CXX) $(SOURCES)/test/test_lzw.cpp $(LIBS)/utils.o $(LIBS)/lzw.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 test_lz78: utils.o lz78.o
-	$(CXX) $(SOURCES)/test_lz78.cpp $(LIBS)/utils.o $(LIBS)/lz78.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
+	$(CXX) $(SOURCES)/test/test_lz78.cpp $(LIBS)/utils.o $(LIBS)/lz78.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 
 untest_lzw: utils.o lz78.o
-	$(CXX) $(SOURCES)/untest_lzw.cpp $(LIBS)/utils.o $(LIBS)/lzw.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
+	$(CXX) $(SOURCES)/test/untest_lzw.cpp $(LIBS)/utils.o $(LIBS)/lzw.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 
 untest_lz78: utils.o lz78.o
-	$(CXX) $(SOURCES)/untest_lz78.cpp $(LIBS)/utils.o $(LIBS)/lz78.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
+	$(CXX) $(SOURCES)/test/untest_lz78.cpp $(LIBS)/utils.o $(LIBS)/lz78.o -o $(TEST)/$@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 utils.o:
 	$(CXX) -c $(SOURCES)/utils.cpp -o $(LIBS)/$@ $(CXXFLAGS)
