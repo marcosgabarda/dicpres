@@ -45,7 +45,9 @@ void lzw::writeCodw (ofstream &File, codw Codigo) {
 }
 
 codw lzw::readCodw (ifstream &File) {
-  int n = sizeof(codw);
+  char buffer[1];
+  File.read(buffer, 1);
+  byte n = static_cast<byte>(buffer[0]);
   vector<byte> tmp;
   for (int i = 0; i < n; i++) {
     char buffer[1];
@@ -136,30 +138,6 @@ void lzw::compress (string sFileIn, string sFileOut) {
     }
   }
 
-  /*debug(string("Simbolos del diccionario tras comprimir: "));
-  unsigned int nTabla = static_cast<unsigned int>(m_vTablaCod.size());
-  debug(nTabla);
-
-  debug("Escribiendo tam. de la tabla...");
-  writeCodw(file, nTabla > iLimit? nTabla - iLimit : 0);
-
-  debug("Escribiendo tabla...");
-  for(codw index = iLimit; index < nTabla; index++ ) {
-    unsigned int nBytes = static_cast<unsigned int>(m_vTablaCod.find(index)->second.size());
-    codw iIndex = m_vTablaCod.find(index)->first;
-    writeCodw(file, iIndex);
-    writeCodw(file, nBytes);
-    for(list<byte>::iterator itList = m_vTablaCod.find(index)->second.begin();
-	itList != m_vTablaCod.find(index)->second.end();
-	itList++) {
-      byte b = *itList;
-      char buffer[1];
-      buffer[0] = static_cast<char>(b);
-      file.write(buffer, 1);
-    }
-    
-    }*/
-  
   debug("Escribiendo fichero comprimido...");
   int n = static_cast<int>(vBufferSalida.size());
   for (int i = 0; i < n; i++) {
@@ -181,49 +159,58 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
   ifstream fileIn(sFileIn.c_str(), ifstream::binary);
   ofstream fileOut(sFileOut.c_str(), ofstream::binary);
 
-  /**
-   * Leer la tabla de compresion.
-   */
-  unsigned int nSizeTabla;
-  nSizeTabla = readCodw(fileIn);
-
-  debug("Tam. de la tabla guardado en fichero:");
-  debug(nSizeTabla);
-
-  debug("Leyendo tabla...");
-  for (unsigned int i = 0; i < nSizeTabla; i++) {
-    codw iIndex;
-    unsigned int nBytes;
-    list<byte> tmp;
-    iIndex = readCodw(fileIn);
-    nBytes = readCodw(fileIn);
-    for (unsigned int j = 0; j < nBytes; j++) {
-      byte b;
-      char buffer[1];
-      fileIn.read(buffer, 1);
-      b = static_cast<byte>(buffer[0]);
-      tmp.push_back(b);
-    }
-    m_vTablaCod[iIndex] = tmp;
-    m_vTablaCodInv[tmp] = iIndex;
-  }
-  debug("FIN");
-
-  debug("Tam. de la tabla:");
-  debug(static_cast<int>(m_vTablaCod.size()));
-
   debug("Leyendo fichero...");
+  
+  codw iCodigoAnterior;
+  codw iCodigo;
+  iCodigo = readCodw(fileIn);
+  list<byte> lTmp = m_vTablaCod[iCodigo];
+  for (list<byte>::iterator it = lTmp.begin();
+       it != lTmp.end();
+       it++) {
+    char buffer[1];
+    buffer[0] = static_cast<char>(*it);
+    fileOut.write(buffer, 1);
+  }
+  iCodigoAnterior = iCodigo;
+
   while (!fileIn.eof()) {
-    codw iCodigo;
     iCodigo = readCodw(fileIn);
-    list<byte> lTmp = m_vTablaCod[iCodigo];
-    for (list<byte>::iterator it = lTmp.begin();
-	 it != lTmp.end();
-	 it++) {
-      char buffer[1];
-      buffer[0] = static_cast<char>(*it);
-      fileOut.write(buffer, 1);
+    if (m_vTablaCod.find(iCodigo) != m_vTablaCod.end()) {
+      /**
+       * Caso en el que está en la tabla.
+       */
+      list<byte> lTmp = m_vTablaCod[iCodigo];
+      for (list<byte>::iterator it = lTmp.begin();
+	   it != lTmp.end();
+	   it++) {
+	char buffer[1];
+	buffer[0] = static_cast<char>(*it);
+	fileOut.write(buffer, 1);
+      }
+      list<byte> lTmp2 = m_vTablaCod[iCodigoAnterior];
+      lTmp2.push_back(lTmp.front());
+      codw index = static_cast<codw>(m_vTablaCod.size());
+      m_vTablaCod[index] = lTmp2;
+      m_vTablaCodInv[lTmp2]= index;
+    } else {
+      /**
+       * Caso en el que NO está en la tabla.
+       */
+      list<byte> lTmp = m_vTablaCod[iCodigoAnterior];
+      lTmp.push_back(lTmp.front());
+      for (list<byte>::iterator it = lTmp.begin();
+	   it != lTmp.end();
+	   it++) {
+	char buffer[1];
+	buffer[0] = static_cast<char>(*it);
+	fileOut.write(buffer, 1);
+      }
+      codw index = static_cast<codw>(m_vTablaCod.size());
+      m_vTablaCod[index] = lTmp;
+      m_vTablaCodInv[lTmp]= index;
     }
+    iCodigoAnterior = iCodigo;
   }
   debug("FIN");
 

@@ -84,9 +84,9 @@ vector<byte> codw2byte(codw Codigo) {
 }
 
 codw byte2codw(vector<byte> Codigo) {
-  int n = static_cast<int>(Codigo[0]);
+  int n = static_cast<int>(Codigo.size());
   codw res = 0;
-  for (int i = 1; i < n; i++) {
+  for (int i = 0; i < n; i++) {
     res = res << 8;
     res = res | Codigo[i];
   }
