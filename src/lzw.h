@@ -36,7 +36,7 @@ class lzw {
 
   void init();
 
-  byte readChar();
+  bool readChar(byte &c);
   void readSource (string sFile);
 
   codw readCodw (ifstream &File);
