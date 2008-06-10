@@ -1,13 +1,16 @@
 CXX=g++
-CXXFLAGS= -Wall -pedantic -g
+CXXFLAGS= -Wall -pedantic
 SOURCES=src
 LIBS=lib
 TEST=test
 LDLIBS=-lm
 DEBUG=-g
 
-all:
-	$(error "### Funciones principales sin implementar ###")
+all: dicpres
+
+dicpres: utils.o lzw.o lz78.o
+	@echo "### Programa principal ###"
+	$(CXX) $(SOURCES)/dicpres.cpp $(LIBS)/utils.o $(LIBS)/lzw.o $(LIBS)/lz78.o -o $@ $(CXXFLAGS) $(LDLIBS) $(DEBUG)
 
 test: test_lzw test_lz78 untest_lzw untest_lz78
 
@@ -35,4 +38,4 @@ lz78.o:
 	$(CXX) -c $(SOURCES)/lz78.cpp -o $(LIBS)/$@ $(CXXFLAGS)
 
 clean:
-	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~
+	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~ dicpres
