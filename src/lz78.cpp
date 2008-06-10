@@ -109,41 +109,42 @@ void lz78::readFile(string sFile) {
  * \param sFile Dirección donde se dejara el fichero comprimido.
  */
 void lz78::compress(string sFile){
-	byte c;
-	list<byte> cadena;
-	ofstream file(sFile.c_str(),ofstream::binary);
+  byte c;
+  list<byte> cadena;
+  ofstream file(sFile.c_str(),ofstream::binary);
 	
-	while((readChar(c))){
-		cadena.push_back(c);
-		if(mTablaCod.find(cadena)==mTablaCod.end()){
-			mTablaCod[cadena]=iIndice;
-			string indi;
-			if(cadena.size()==1)
-				//vTablaCod.push_back(cod78(0,c));
-				indi = int2bin(0);
-			else{
-				cadena.pop_back();
-				//vTablaCod.push_back(cod78(mTablaCod[cadena],c));
-				indi = int2bin(mTablaCod[cadena]);
-			}
+  while((readChar(c))){
+    cadena.push_back(c);
+    if(mTablaCod.find(cadena)==mTablaCod.end()){
+      mTablaCod[cadena]=iIndice;
+      string indi;
+      if(cadena.size()==1)
+	//vTablaCod.push_back(cod78(0,c));
+	indi = int2bin(0);
+      else{
+	cadena.pop_back();
+	//vTablaCod.push_back(cod78(mTablaCod[cadena],c));
+	indi = int2bin(mTablaCod[cadena]);
+      }
 			
-			int nbits=log(cuentaIndi)/log(2);
-			nbits=((nbits/8)+1)*8;
-			int tambuf=(nbits/8)+1; 
-			char buffer[tambuf];
-			for(int j=0, n=0; j < tambuf-1; j++, n+=8){
-				buffer[j]= bin2char(indi.substr(n,8));
-			}
-			buffer[tambuf-1]=c;
-			file.write(buffer,tambuf);
+      int nbits=log(cuentaIndi)/log(2);
+      nbits=((nbits/8)+1)*8;
+      int tambuf=(nbits/8)+1; 
+      char *buffer = new char[tambuf];
+      for(int j=0, n=0; j < tambuf-1; j++, n+=8){
+	buffer[j]= bin2char(indi.substr(n,8));
+      }
+      buffer[tambuf-1]=c;
+      file.write(buffer,tambuf);
 			
-			iIndice++;
-			cuentaIndi++;
-			cadena.clear();
-		}
-	}
+      iIndice++;
+      cuentaIndi++;
+      cadena.clear();
+      delete []buffer;
+    }
+  }
 	
-	file.close();
+  file.close();
 }
 
 void lz78::readCom(string sFile) {
@@ -155,9 +156,9 @@ void lz78::readCom(string sFile) {
   while (!file.eof()) {
   
     int nbits=log(cuentaIndi)/log(2);
-	nbits=((nbits/8)+1)*8;
+    nbits=((nbits/8)+1)*8;
     int tambuf=(nbits/8)+1; 
-    char buffer[tambuf];
+    char *buffer = new char[tambuf];
   
     file.read(buffer, tambuf);
     //indi = static_cast<int>(buffer[0]);
@@ -170,7 +171,8 @@ void lz78::readCom(string sFile) {
     indichar.clear();
     //cerr<<indi<<endl;
     vTablaCod.push_back(cod78(indi,buffer[tambuf-1]));
-	cuentaIndi++;
+    cuentaIndi++;
+    delete []buffer;
   }
 
   file.close(); 
@@ -186,7 +188,7 @@ void lz78::obtainElem(list<byte> &cadena, int &i){
   }
   else{
     //cerr<<"indi "<< indi<<". i "<<i<<endl;
-	int nuevoindi= indi-1;
+    int nuevoindi= indi-1;
     obtainElem(cadena,nuevoindi);
     cadena.push_back(vTablaCod[i].second);
     return;
