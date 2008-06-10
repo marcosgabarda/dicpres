@@ -10,13 +10,27 @@ void lzw::init() {
   m_vBuffer.clear();
   m_vTablaCod.clear();
   m_vTablaCodInv.clear();
+
+  /**
+   * Tabla para los 256 bytes posibles
+   */
+  for (unsigned int j = 0; j < 256; j++) {
+    byte i = static_cast<byte>(j);
+    codw index = static_cast<codw>(m_vTablaCod.size());
+    list<byte> tmp;
+    tmp.push_back(i);
+    m_vTablaCod[index] = tmp;
+    m_vTablaCodInv[tmp] = index;
+  }
+
 }
 
-byte lzw::readChar() {
+bool lzw::readChar(byte &c) {
   int n = static_cast<int>(m_vBuffer.size());
   m_iComp++;
-  if (n == 0 || m_iComp >= n || m_iComp < 0) return 0;
-  return m_vBuffer[m_iComp];
+  if (n == 0 || m_iComp >= n || m_iComp < 0) return false;
+  c = m_vBuffer[m_iComp];
+  return true;
 }
 
 void lzw::writeCodw (ofstream &File, codw Codigo) {
@@ -63,27 +77,14 @@ void lzw::debug(int buffer) {
 void lzw::readSource (string sFile) {
 
   ifstream file(sFile.c_str(), ifstream::binary);
+
   byte cCaracter;
   char buffer[1];
 
   while (!file.read(buffer, 1).eof()) {
     cCaracter = static_cast<byte>(buffer[0]);
-    
-    m_vBuffer.push_back(cCaracter);
-
-    list<byte> tmp;
-    tmp.push_back(cCaracter);
-    
-    if (m_vTablaCodInv.find(tmp) == m_vTablaCodInv.end()) {
-      codw index = static_cast<codw>(m_vTablaCod.size() + 1);
-      m_vTablaCod[index] = tmp;
-      m_vTablaCodInv[tmp]= index;
-    }
-    
+    m_vBuffer.push_back(cCaracter);    
   }
-
-  debug(string("Simbolos del diccionario iniciales: "));
-  debug(static_cast<int>(m_vTablaCodInv.size()));
 
   file.close(); 
 
@@ -110,8 +111,7 @@ void lzw::compress (string sFileIn, string sFileOut) {
 
   list<byte> sCadena;
   byte cCaracter;
-  while ((cCaracter = readChar())) {
-    debug(cCaracter);
+  while (readChar(cCaracter)) {
     list<byte> sTmp(sCadena);
     sTmp.push_back(cCaracter);
     if (m_vTablaCodInv.find(sTmp) != m_vTablaCodInv.end()) {
@@ -121,7 +121,7 @@ void lzw::compress (string sFileIn, string sFileOut) {
       /**
        * Añadir sTmp al diccionario.
        */
-      codw index = static_cast<codw>(m_vTablaCod.size() + 1);
+      codw index = static_cast<codw>(m_vTablaCod.size());
       m_vTablaCod[index] = sTmp;
       m_vTablaCodInv[sTmp]= index;
 
@@ -136,25 +136,19 @@ void lzw::compress (string sFileIn, string sFileOut) {
     }
   }
 
-  debug("Indices leidos: ");
-  debug(vBufferSalida.size());
-
   debug(string("Simbolos del diccionario tras comprimir: "));
-
   unsigned int nTabla = static_cast<unsigned int>(m_vTablaCod.size());
   debug(nTabla);
 
-  writeCodw(file, nTabla);
+  writeCodw(file, nTabla > 256? nTabla - 256 : 0);
 
-  for(map<codw, list<byte> >::iterator itTabla = m_vTablaCod.begin();
-      itTabla != m_vTablaCod.end();
-      itTabla++) {
-    unsigned int nBytes = static_cast<unsigned int>(itTabla->second.size());
-    codw iIndex = itTabla->first;
+  for(codw index = 256; index < nTabla; index++ ) {
+    unsigned int nBytes = static_cast<unsigned int>(m_vTablaCod.find(index)->second.size());
+    codw iIndex = m_vTablaCod.find(index)->first;
     writeCodw(file, iIndex);
     writeCodw(file, nBytes);
-    for(list<byte>::iterator itList = itTabla->second.begin();
-	itList != itTabla->second.end();
+    for(list<byte>::iterator itList = m_vTablaCod.find(index)->second.begin();
+	itList != m_vTablaCod.find(index)->second.end();
 	itList++) {
       byte b = *itList;
       char buffer[1];
@@ -169,9 +163,6 @@ void lzw::compress (string sFileIn, string sFileOut) {
     writeCodw(file, vBufferSalida[i]);
   }
 
-  debug("N. de indices escritos: ");
-  debug(n);
-  
   file.close();
 
   debug("### FIN COMPRESION ###");
@@ -219,13 +210,9 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
   debug(static_cast<int>(m_vTablaCod.size()));
 
   debug("Leyendo fichero...");
-  int n = 0;
-  do {
+  while (!fileIn.eof()) {
     codw iCodigo;
-
     iCodigo = readCodw(fileIn);
-    n++;
-
     list<byte> lTmp = m_vTablaCod[iCodigo];
     for (list<byte>::iterator it = lTmp.begin();
 	 it != lTmp.end();
@@ -234,11 +221,8 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
       buffer[0] = static_cast<char>(*it);
       fileOut.write(buffer, 1);
     }
-  }  while(!fileIn.eof());
+  }
   debug("FIN");
-
-  debug("N. de indices leidos: ");
-  debug(n);
 
   fileIn.close();
   fileOut.close();

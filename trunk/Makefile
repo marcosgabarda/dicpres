@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS= -Wall -pedantic
+CXXFLAGS= -Wall -pedantic -g
 SOURCES=src
 LIBS=lib
 TEST=test
@@ -35,4 +35,4 @@ lz78.o:
 	$(CXX) -c $(SOURCES)/lz78.cpp -o $(LIBS)/$@ $(CXXFLAGS)
 
 clean:
-	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o
+	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~
