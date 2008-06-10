@@ -14,7 +14,7 @@ void lzw::init() {
   /**
    * Tabla para los 256 bytes posibles
    */
-  for (unsigned int j = 0; j < 256; j++) {
+  for (unsigned int j = 0; j < iLimit; j++) {
     byte i = static_cast<byte>(j);
     codw index = static_cast<codw>(m_vTablaCod.size());
     list<byte> tmp;
@@ -140,9 +140,11 @@ void lzw::compress (string sFileIn, string sFileOut) {
   unsigned int nTabla = static_cast<unsigned int>(m_vTablaCod.size());
   debug(nTabla);
 
-  writeCodw(file, nTabla > 256? nTabla - 256 : 0);
+  debug("Escribiendo tam. de la tabla...");
+  writeCodw(file, nTabla > iLimit? nTabla - iLimit : 0);
 
-  for(codw index = 256; index < nTabla; index++ ) {
+  debug("Escribiendo tabla...");
+  for(codw index = iLimit; index < nTabla; index++ ) {
     unsigned int nBytes = static_cast<unsigned int>(m_vTablaCod.find(index)->second.size());
     codw iIndex = m_vTablaCod.find(index)->first;
     writeCodw(file, iIndex);
@@ -158,6 +160,7 @@ void lzw::compress (string sFileIn, string sFileOut) {
     
   }
 
+  debug("Escribiendo fichero comprimido...");
   int n = static_cast<int>(vBufferSalida.size());
   for (int i = 0; i < n; i++) {
     writeCodw(file, vBufferSalida[i]);
