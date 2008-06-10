@@ -98,7 +98,7 @@ void lz78::readCom(string sFile) {
   file.close(); 
 }
 
-void lz78::obtainElem(list<byte> &cadena, int i){
+void lz78::obtainElem(list<byte> &cadena, int &i){
   //cerr<<"Obtain "<<i<<endl;
   int indi = static_cast<int>(vTablaCod[i].first);
   if(indi==0){
@@ -108,7 +108,8 @@ void lz78::obtainElem(list<byte> &cadena, int i){
   }
   else{
     //cerr<<"indi "<< indi<<". i "<<i<<endl;
-    obtainElem(cadena,indi-1);
+	int nuevoindi= indi-1;
+    obtainElem(cadena,nuevoindi);
     cadena.push_back(vTablaCod[i].second);
     return;
   }

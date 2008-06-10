@@ -38,20 +38,30 @@ byte bin2char(string sSecuencia) {
  */
 string char2bin(byte cData) {
   string sBuffer;
-  for (byte i = cData; i > 1; i/=2) {
-    byte nResto = i%2;
-    if (nResto == 0) {
-      sBuffer.push_back('0');
-    } else {
-      sBuffer.push_back('1');
-    }
-  }
-  sBuffer.push_back('1');
   string sBufferFinal;
-  int nLongitud = static_cast<int>(sBuffer.size());
-  for (int i = 0; i < (8 - nLongitud); i++ ) sBufferFinal.push_back('0');
-  for(int i = nLongitud - 1; i >= 0; i-- ) sBufferFinal.push_back(sBuffer[i]);
-  return sBufferFinal;
+  if(cData==0){
+    for (int i = 0; i < 8; i++ )
+      sBufferFinal.push_back('0');
+    return sBufferFinal;
+  }
+
+  else{
+  
+	  for (byte i = cData; i > 1; i/=2) {
+		  byte nResto = i%2;
+		  if (nResto == 0) {
+			  sBuffer.push_back('0');
+		  } else {
+			  sBuffer.push_back('1');
+		  }
+	  }
+	  sBuffer.push_back('1');
+
+	  int nLongitud = static_cast<int>(sBuffer.size());
+	  for (int i = 0; i < (8 - nLongitud); i++ ) sBufferFinal.push_back('0');
+	  for(int i = nLongitud - 1; i >= 0; i-- ) sBufferFinal.push_back(sBuffer[i]);
+	  return sBufferFinal;
+  }
 }
 
 vector<byte> codw2byte(codw Codigo) {

@@ -10,7 +10,7 @@ using namespace std;
 /**
  * Clase que implementa la compresion de ficheros por el metodo de dicionario
  * LZ78.
- * \author Iván Rodriguez Sastre & Marcos Gabarda Inat
+ * \author IvÂ·n Rodriguez Sastre & Marcos Gabarda Inat
  */
 class lz78 {
  private:
@@ -21,7 +21,7 @@ class lz78 {
   vector<byte> vBuffer;
 
   /**
-   * Índice de compresión
+   * Ã•ndice de compresiÃ›n
    */
   int iComp;
 
@@ -33,13 +33,13 @@ class lz78 {
   vector<cod78> vTablaCod;
 
   /**
-   * Mapa donde se almacena una relación lista de chars - indice.
-   * El índice se utilizará para acceder al vector vTablaCod sin recorrerlo. 
+   * Mapa donde se almacena una relaciÃ›n lista de chars - indice.
+   * El ÃŒndice se utilizarÂ· para acceder al vector vTablaCod sin recorrerlo. 
    */
   map<list<byte>,int> mTablaCod;
 
   /**
-   * Índice del mapa y del vector
+   * Ã•ndice del mapa y del vector
    */
   int iIndice;
 
@@ -50,7 +50,7 @@ class lz78 {
   void readCom (string sFile);
   void uncompress (string sFile);
 
-  void obtainElem(list<byte> &cadena, int i);
+  void obtainElem(list<byte> &cadena, int &i);
 
 };
 
