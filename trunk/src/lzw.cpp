@@ -136,7 +136,7 @@ void lzw::compress (string sFileIn, string sFileOut) {
     }
   }
 
-  debug(string("Simbolos del diccionario tras comprimir: "));
+  /*debug(string("Simbolos del diccionario tras comprimir: "));
   unsigned int nTabla = static_cast<unsigned int>(m_vTablaCod.size());
   debug(nTabla);
 
@@ -158,8 +158,8 @@ void lzw::compress (string sFileIn, string sFileOut) {
       file.write(buffer, 1);
     }
     
-  }
-
+    }*/
+  
   debug("Escribiendo fichero comprimido...");
   int n = static_cast<int>(vBufferSalida.size());
   for (int i = 0; i < n; i++) {
