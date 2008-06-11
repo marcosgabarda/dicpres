@@ -6,26 +6,20 @@ using namespace std;
 
 int main (int argc, char * argv[]) {
   /**
-   * Uso del programa:
+   * Modo de empleo:
    * $dicpres (modo) [opciones] fichero-entrada [fichero-salida]
    *
    * Opciones:
-   *
    * --help : Muestra este texto de ayuda.
-   *
    * -v    : Activa el modo verbose, sacando por pantalla información
    *         de depuración
    *
    * Modo:
-   *
    * -c    : Comprime.
-   * 
    * -e    : Descomprime.
    *
    * Metodos:
-   *
    * -lz78  : Comprime con el método del LZ78 (Por defecto).
-   * 
    * -lzw : Comprime con el método del LZW.
    *
    *
@@ -88,8 +82,11 @@ int main (int argc, char * argv[]) {
   if (!bLZW && !bLZ78) bError = true;
   if (sFileIn == "") bError = true;
 
+  if (bHelp) bError = false;
+
   if (bError) {
-    cerr << "Uso del programa:\n" << argv[0] << " (modo) [opciones] fichero-entrada [fichero-salida]" << endl;
+    cerr << "Modo de empleo:\n" << argv[0] << " (modo) [opciones] fichero-entrada [fichero-salida]" << endl;
+    cerr << "Use la opción --help para optener más ayuda." << endl;
     return 0;
   }
 
@@ -98,20 +95,20 @@ int main (int argc, char * argv[]) {
      * Mostrar ayuda.
      */
     cout << "Comprime ficheros únicos mediante métodos de diccionario.\n"<< endl;
-    cout << "Uso del programa:\n " << endl;
+    cout << "Modo de empleo: " << endl;
     cout << argv[0] <<" (modo) [opciones] fichero-entrada [fichero-salida]" << endl << endl;
-    cout << "Opciones:" << endl << endl;
-    cout << "--help : Muestra este texto de ayuda." << endl << endl;   
+    cout << "Opciones:" << endl;
+    cout << "--help : Muestra este texto de ayuda." << endl;   
     cout << "-v    : Activa el modo verbose, sacando por pantalla información"  << endl;
     cout << "        de depuración."  << endl << endl;
-    cout << "Modo:" << endl << endl;
-    cout << "-c    : Comprime." << endl << endl;
+    cout << "Modo:" << endl;
+    cout << "-c    : Comprime." << endl;
     cout << "-e    : Descomprime." << endl << endl;
-    cout << "Metodos:" << endl << endl;
-    cout << "-lz78  : Comprime con el método del LZ78 (Por defecto)." << endl << endl;
+    cout << "Metodos:" << endl;
+    cout << "-lz78  : Comprime con el método del LZ78 (Por defecto)." << endl;
     cout << "-lzw : Comprime con el método del LZW." << endl << endl;
     cout << "Autores: Iván Rodríguez Sastre & Marcos Gabarda Inal" << endl;
-    cout << "GPL 3.0" << endl << endl;
+    cout << "GPL 3.0" << endl;
   } else {
     /**
      * Ejecutar.
