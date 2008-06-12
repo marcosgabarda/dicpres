@@ -1,18 +1,34 @@
 #include "lzw.h"
 #include "utils.h"
 
+/**
+ * Constructor.
+ *
+ * \param[in] bVerbose Indica si se tiene que mostrar la informaci&oacute;n de
+ * depuraci&oacute;n o no.
+ */
 lzw::lzw(bool bVerbose) {
   m_bVerbose = bVerbose;
 }
 
+/**
+ * Inicializa los valores de la clase.
+ */
 void lzw::init() {
+
+  /**
+   * En primer lugar se inicializan los atributos de la clase, limpiando
+   * el buffer, vaciando las tablas, y pondiendo el &iacute;ndice de lectura a -1.
+   */
   m_iComp = -1;
   m_vBuffer.clear();
   m_vTablaCod.clear();
   m_vTablaCodInv.clear();
 
   /**
-   * Tabla para los 256 bytes posibles
+   * Por &uacute;ltimo, se genera una tabla inicial, para un alfabeto de 256 
+   * s&iacute;mbolos, correspondientes a los 256 bytes posibles, 
+   * del 0000 0000 al 1111 1111.
    */
   for (unsigned int j = 0; j < iLimit; j++) {
     byte i = static_cast<byte>(j);
@@ -25,7 +41,19 @@ void lzw::init() {
 
 }
 
+/**
+ * M&eacute;todo que lee un byte del m_vBuffer.
+ *
+ * \param[out] c Byte leido.
+ * \return Ture en caso de que se haya leido un byte correctamente, y false
+ * false en caso contrario.
+ */
 bool lzw::readChar(byte &c) {
+
+  /**
+   * Usa el atributo m_iComp para acceder a la posición actual de lectura del
+   * m_vBuffer.
+   */
   int n = static_cast<int>(m_vBuffer.size());
   m_iComp++;
   if (n == 0 || m_iComp >= n || m_iComp < 0) return false;
@@ -44,6 +72,12 @@ void lzw::writeCodw (ofstream &File, codw Codigo) {
   }
 }
 
+/**
+ * M&eacute;todo que accede al fichero File, lee lo que ocupa un codw y lo
+ * traduce a un variable de tipo codw.
+ *
+ * \param[in] File Referencia del fichero de lectura.
+ */
 codw lzw::readCodw (ifstream &File) {
   char buffer[1];
   File.read(buffer, 1);
@@ -58,23 +92,41 @@ codw lzw::readCodw (ifstream &File) {
   return cod;
 }
 
+/**
+ * M&eacute;todo que muestra informaci&oacute;n de depuranci&oacute;n.
+ *
+ * \param[in] buffer Texto que se quiere sacar por pantalla.
+ */
 void lzw::debug(const char* buffer) {
   if (m_bVerbose)
     cout << "[Debug] "<< buffer << endl;
 }
+
+/**
+ * M&eacute;todo que muestra informaci&oacute;n de depuranci&oacute;n.
+ *
+ * \param[in] buffer Texto que se quiere sacar por pantalla.
+ */
 void lzw::debug(string buffer) {
   if (m_bVerbose)
     cout << "[Debug] "<< buffer << endl;
 }
+
+/**
+ * M&eacute;todo que muestra informaci&oacute;n de depuranci&oacute;n.
+ *
+ * \param[in] buffer Texto que se quiere sacar por pantalla.
+ */
 void lzw::debug(int buffer) {
   if (m_bVerbose)
     cout << "[Debug] "<< buffer << endl;
 }
 
 /**
- * Método que lee el fichero a comprimir, y además contruye el diccionario 
+ * M&eacute;todo que lee el fichero a comprimir, y además contruye el diccionario 
  * inicial.
- * \param sFile Dirección donde se encuentra el fichero a comprimir.
+ *
+ * \param[in] sFile Direcci&oacute;n donde se encuentra el fichero a comprimir.
  */
 void lzw::readSource (string sFile) {
 
@@ -93,8 +145,10 @@ void lzw::readSource (string sFile) {
 }
 
 /**
- * Método que comprime.
- * \param sFile Dirección donde se dejara el fichero comprimido.
+ * M&eacute;todo que implementa el algoritmo de copresi&oacute;n.
+ *
+ * \param[in] sFileIn Direcci&oacute;n del fichero que se quiere comprimir.
+ * \param[in] sFileOut Direcci&oacute;n donde se dejara el fichero comprimido.
  */
 void lzw::compress (string sFileIn, string sFileOut) {
   
@@ -121,14 +175,14 @@ void lzw::compress (string sFileIn, string sFileOut) {
     } else {
 
       /**
-       * Añadir sTmp al diccionario.
+       * - A&ntilde;adir sTmp al diccionario.
        */
       codw index = static_cast<codw>(m_vTablaCod.size());
       m_vTablaCod[index] = sTmp;
       m_vTablaCodInv[sTmp]= index;
 
       /**
-       * Emitir índice de sCadena
+       * - Emitir &iacute;ndice de sCadena
        */
       vBufferSalida.push_back(m_vTablaCodInv[sCadena]);
       
@@ -150,6 +204,12 @@ void lzw::compress (string sFileIn, string sFileOut) {
   
 }
 
+/**
+ * M&eacute;todo que implementa el algoritmo de descopresi&oacute;n.
+ *
+ * \param[in] sFileIn Direcci&oacute;n del fichero que se quiere descomprimir.
+ * \param[in] sFileOut Direcci&oacute;n donde se dejara el fichero descomprimido.
+ */
 void lzw::uncompress (string sFileIn, string sFileOut) {
   
   debug("### INICIO DESCOMPRESION ###");
@@ -178,7 +238,7 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
     iCodigo = readCodw(fileIn);
     if (m_vTablaCod.find(iCodigo) != m_vTablaCod.end()) {
       /**
-       * Caso en el que está en la tabla.
+       * Caso en el que est&aacute; en la tabla.
        */
       list<byte> lTmp = m_vTablaCod[iCodigo];
       for (list<byte>::iterator it = lTmp.begin();
@@ -195,7 +255,7 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
       m_vTablaCodInv[lTmp2]= index;
     } else {
       /**
-       * Caso en el que NO está en la tabla.
+       * Caso en el que NO est&aacute; en la tabla.
        */
       list<byte> lTmp = m_vTablaCod[iCodigoAnterior];
       lTmp.push_back(lTmp.front());

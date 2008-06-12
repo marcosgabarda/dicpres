@@ -1,29 +1,29 @@
 #include "lzw.h"
 #include "lz78.h"
-#include <iostream>
+#include "types.h"
 
 using namespace std;
 
+/**
+ * Modo de empleo:
+ * $dicpres (modo) [opciones] fichero-entrada [fichero-salida]
+ *
+ * Opciones:
+ * --help : Muestra este texto de ayuda.
+ * -v    : Activa el modo verbose, sacando por pantalla información
+ *         de depuración
+ *
+ * Modo:
+ * -c    : Comprime.
+ * -e    : Descomprime.
+ *
+ * Metodos:
+ * -lz78  : Comprime con el método del LZ78 (Por defecto).
+ * -lzw : Comprime con el método del LZW.
+ *
+ *
+ */
 int main (int argc, char * argv[]) {
-  /**
-   * Modo de empleo:
-   * $dicpres (modo) [opciones] fichero-entrada [fichero-salida]
-   *
-   * Opciones:
-   * --help : Muestra este texto de ayuda.
-   * -v    : Activa el modo verbose, sacando por pantalla información
-   *         de depuración
-   *
-   * Modo:
-   * -c    : Comprime.
-   * -e    : Descomprime.
-   *
-   * Metodos:
-   * -lz78  : Comprime con el método del LZ78 (Por defecto).
-   * -lzw : Comprime con el método del LZW.
-   *
-   *
-   */
   
   bool bError = false;
 

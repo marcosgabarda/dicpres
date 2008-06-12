@@ -7,6 +7,8 @@ LDLIBS=-lm
 DEBUG=-g
 
 all: dicpres
+	@echo "### Generando documentacion ###"
+	doxygen Doxyfile
 
 dicpres: utils.o lzw.o lz78.o
 	@echo "### Programa principal ###"
@@ -39,3 +41,4 @@ lz78.o:
 
 clean:
 	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~ dicpres
+	$(RM) -r doc/*
