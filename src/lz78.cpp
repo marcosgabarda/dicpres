@@ -18,7 +18,8 @@ bool lz78::readChar(byte &c){
 /**
  * Convierte de un binario, representado por una cadena de caracteres 0 y 1, a un 
  * entero, con la codificacion correspondiente en binario real. 
- * \author Iv·n Rodriguez Sastre & Marcos Gabarda Inat
+ * \author Iv&aacute;n Rodr&iacute;guez Sastre
+ * \author Marcos Gabarda Inat
  * \param sSecuencia string
  * \return unsigned char
  */
@@ -46,7 +47,8 @@ int lz78::bin2int(string sSecuencia) {
  * cadena de 0's y 1's, con la codificacion correspondiente en binario real
  * de tamaÒo log(cuentaIndi)/log(2) (número de bits
  * necesarios para codificar el entero).
- * \author Iv·n Rodriguez Sastre & Marcos Gabarda Inat
+ * \author Iv&aacute;n Rodr&iacute;guez Sastre
+ * \author Marcos Gabarda Inat
  * \param iData int
  * \return string
  */
@@ -85,9 +87,9 @@ string lz78::int2bin(int iData) {
 
 
 /**
- * Método que lee el fichero a comprimir, y además contruye el diccionario 
+ * M&eacute;todo que lee el fichero a comprimir, y además contruye el diccionario 
  * inicial.
- * \param sFile Dirección donde se encuentra el fichero a comprimir.
+ * \param sFile Direcci&oacute;n donde se encuentra el fichero a comprimir.
  */
 void lz78::readFile(string sFile) {
 
@@ -105,8 +107,8 @@ void lz78::readFile(string sFile) {
 }
 
 /**
- * Método que comprime con LZ78.
- * \param sFile Dirección donde se dejara el fichero comprimido.
+ * M&eacute;todo que comprime con LZ78.
+ * \param sFile Direcci&oacute;n donde se dejara el fichero comprimido.
  */
 void lz78::compress(string sFile){
   byte c;
@@ -196,7 +198,7 @@ void lz78::obtainElem(list<byte> &cadena, int &i){
 }
 
 /**
- * Método que descomprime un fichero LZ78.
+ * M&eacute;todo que descomprime un fichero LZ78.
  * \param sFile Dirección donde se dejara el fichero descomprimido.
  */
 void lz78::uncompress(string sFile){
@@ -219,3 +221,4 @@ void lz78::uncompress(string sFile){
 
   file.close();
 }
+
