@@ -192,6 +192,24 @@ void lzw::compress (string sFileIn, string sFileOut) {
     }
   }
 
+  /**
+   * Hay que tener en cuenta que la codificaci&oacute;n del &uacute;ltimo
+   * car&aacute;cter nunca se podr&aacute; emitir, por lo tanto se pierde
+   * informaci&oacute;n.
+   */
+  if (sCadena.size() != 0 ) {
+    if (m_vTablaCodInv.find(sCadena) != m_vTablaCodInv.end()) {
+      vBufferSalida.push_back(m_vTablaCodInv[sCadena]);
+    } else {
+      list<byte> sTmp;
+      byte c = sCadena.back();
+      sTmp.push_back(c);
+      sCadena.pop_back();
+      vBufferSalida.push_back(m_vTablaCodInv[sCadena]);
+      vBufferSalida.push_back(m_vTablaCodInv[sTmp]);
+    }
+  }
+
   debug("Escribiendo fichero comprimido...");
   int n = static_cast<int>(vBufferSalida.size());
   for (int i = 0; i < n; i++) {
