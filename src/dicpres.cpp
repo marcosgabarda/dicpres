@@ -5,22 +5,53 @@
 using namespace std;
 
 /**
- * Modo de empleo:
- * $dicpres (modo) [opciones] fichero-entrada [fichero-salida]
+ * \mainpage M&eacute;todos de compresi&oacute;n basados en diccionarios.
  *
- * Opciones:
- * --help : Muestra este texto de ayuda.
- * -v    : Activa el modo verbose, sacando por pantalla información
- *         de depuración
+ * \section notas Notas previas
  *
- * Modo:
- * -c    : Comprime.
- * -e    : Descomprime.
+ * <ul>
+ * <li> LZ78 </li>
+ * 
+ * Se ha implementado un control del n&uacute;mero m&iacute;nimo de bits 
+ * necesarios para codificar el entero en cada tupla de la
+ * codificaci&oacute;n.
  *
- * Metodos:
- * -lz78  : Comprime con el m&eacute;todo del LZ78 (Por defecto).
- * -lzw : Comprime con el método del LZW.
+ * <li> LZW </li>
  *
+ * Los &iacute;ndices de la codificaci&oacute;n est&aacute;n formados por
+ * un primer byte que indica el numero de bytes siguientes que contienen
+ * el n&uacute;mero del &iacute;ndice del diccionario.
+ *
+ * </ul>
+ *
+ * \section help Ejecuci&oacute;n
+ *
+ * Modo de empleo del programa principal:
+ *
+ * <p>$dicpres (modo) [opciones] fichero-entrada [fichero-salida]</p>
+ *
+ * Opciones:<br />
+ * --help : Muestra este texto de ayuda.<br />
+ * -v     : Activa el modo verbose, sacando por pantalla información
+ *          de depuración.<br />
+ *
+ * Modo:<br />
+ * -c    : Comprime.<br />
+ * -e    : Descomprime.<br />
+ *
+ * Metodos:<br />
+ * -lz78  : Comprime con el m&eacute;todo del LZ78 (Por defecto).<br />
+ * -lzw : Comprime con el método del LZW.<br />
+ *
+ * \section source C&oacute;digo fuente
+ *
+ * El c&oacute;digo fuente del proyecto, adem&aacute;s de estar adjunto, 
+ * est&aacute; disponible en la siguiente direcci&oacute;n: <br />
+ *
+ * http://code.google.com/p/dicpres
+ *
+ * Tambi&eacute;n est&aacute; disponible el c&oacute;digo en un repositorio
+ * de Subversion, accesible desde el anterior enlace.
  *
  */
 int main (int argc, char * argv[]) {
