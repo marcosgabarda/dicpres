@@ -40,5 +40,5 @@ lz78.o:
 	$(CXX) -c $(SOURCES)/lz78.cpp -o $(LIBS)/$@ $(CXXFLAGS)
 
 clean:
-	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~ dicpres
+	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~ dicpres $(SOURCES)/*~
 	$(RM) -r doc/*

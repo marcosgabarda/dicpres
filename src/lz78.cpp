@@ -2,15 +2,20 @@
 #include "utils.h"
 
 /**
- * Constructor. Inicializa las variables necesarias para la compresión dinámica.
+ * Constructor. Inicializa las variables necesarias para la compresi&oacute;n 
+ * din&aacute;mica.
  */
 lz78::lz78(){
 
 /**
  * Se inicializan los atributos de la clase:
- * -&Iacute;ndice de compresi&oacute;n.
- * -&Iacute;ndice de relaci&oacute;n entre el mapa y el vector de la clase.
- * -Cuenta del n&uacute;mero de bits necesarios para codificar.
+ *
+ * - &Iacute;ndice de compresi&oacute;n.
+ *
+ * - &Iacute;ndice de relaci&oacute;n entre el mapa y el vector de la clase.
+ *
+ * - Cuenta del n&uacute;mero de bits necesarios para codificar.
+ *
  */
   iComp=-1;
   iIndice=1;

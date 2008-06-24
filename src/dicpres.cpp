@@ -18,7 +18,7 @@ using namespace std;
  * -e    : Descomprime.
  *
  * Metodos:
- * -lz78  : Comprime con el método del LZ78 (Por defecto).
+ * -lz78  : Comprime con el m&eacute;todo del LZ78 (Por defecto).
  * -lzw : Comprime con el método del LZW.
  *
  *
@@ -43,7 +43,7 @@ int main (int argc, char * argv[]) {
   for (int i = 1; i < argc; i++) {
     if (argv[i][0] == '-') {
       /**
-       * Estamos en el caso de que sea una opción.
+       * Estamos en el caso de que sea una opci&oacute;n.
        */
       string sOption(argv[i]);
       if (sOption == "-lzw") {
@@ -119,7 +119,7 @@ int main (int argc, char * argv[]) {
        */
       if (bLZ78) {
 	/**
-	 * Método LZ78.
+	 * M&eacute;todo LZ78.
 	 */
 	lz78 tmp;
 	if (sFileOut == "") sFileOut = sFileIn + ".lz78";
@@ -127,7 +127,7 @@ int main (int argc, char * argv[]) {
 	tmp.compress(sFileOut);
       } else if (bLZW) {
 	/**
-	 * Método LZW.
+	 * M&eacute;todo LZW.
 	 */
 	lzw tmp(bVerbose);
 	if (sFileOut == "") sFileOut = sFileIn + ".lzw";
@@ -135,11 +135,11 @@ int main (int argc, char * argv[]) {
       }
     } else if (bExtract){
       /**
-       * Modo descompresión.
+       * Modo descompresi&oacute;n.
        */
      if (bLZ78) {
 	/**
-	 * Método LZ78.
+	 * M&eacute;todo LZ78.
 	 */
 	lz78 tmp;
 	if (sFileOut == "") sFileOut = sFileIn + ".unlz78";
@@ -147,7 +147,7 @@ int main (int argc, char * argv[]) {
 	tmp.uncompress(sFileOut);
       } else if (bLZW) {
 	/**
-	 * Método LZW.
+	 * M&eacute;todo LZW.
 	 */
 	lzw tmp(bVerbose);
 	if (sFileOut == "") sFileOut = sFileIn + ".unlzw";
