@@ -8,9 +8,16 @@
 using namespace std;
 
 /**
- * Clase que implementa la compresi&oacute;n de ficheros por el metodo de dicionario
- * LZ78.
+ * Clase que implementa la compresi&oacute;n de ficheros por el m&eacute;todo de
+ * dicionario LZ78.
  *
+ * Se usan los m&eacute;todos:
+ * - compress
+ * - uncompress
+ *
+ * Para comprimir y descomprimir, respectivamente.
+ *
+ * \date Julio 2008
  * \author Iv&aacute;n Rodr&iacute;guez Sastre
  * \author Marcos Gabarda Inat
  */
@@ -18,16 +25,19 @@ class lz78 {
  private:
 
   /**
+   * \var vBuffer 
    * Buffer que contiene todo el fichero leido
    */
   vector<byte> vBuffer;
 
   /**
+   * \var iComp
    * &Iacute;ndice de compresi&oacute;n
    */
   int iComp;
   
   /**
+   * \var cuentaIndi
    * Cuenta de &iacute;ndices necesaria para la actualizaci&oacute;n din&aacute;mica de bits.
    */
   int cuentaIndi;
@@ -35,17 +45,20 @@ class lz78 {
   bool readChar(byte &c);
 
   /**
+   * \var vTablaCod 
    * Tabla donde se almacena cada una de las entradas de pares codificantes.
    */
   vector<cod78> vTablaCod;
 
   /**
+   * \var mTablaCod 
    * Mapa donde se almacena una relaciÛn lista de chars - indice.
    * El &iacute;ndice se utilizar&aacute; para acceder al vector vTablaCod sin recorrerlo. 
    */
   map<list<byte>,int> mTablaCod;
 
   /**
+   * \var iIndice 
    * &Iacute;ndice del mapa y del vector
    */
   int iIndice;

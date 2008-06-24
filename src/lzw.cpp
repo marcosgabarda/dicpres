@@ -45,7 +45,7 @@ void lzw::init() {
  * M&eacute;todo que lee un byte del m_vBuffer.
  *
  * \param[out] c Byte leido.
- * \return Ture en caso de que se haya leido un byte correctamente, y false
+ * \return True en caso de que se haya leido un byte correctamente, y false
  * false en caso contrario.
  */
 bool lzw::readChar(byte &c) {
