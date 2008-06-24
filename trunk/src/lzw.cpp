@@ -51,8 +51,8 @@ void lzw::init() {
 bool lzw::readChar(byte &c) {
 
   /**
-   * Usa el atributo m_iComp para acceder a la posición actual de lectura del
-   * m_vBuffer.
+   * Usa el atributo m_iComp para acceder a la posici&oacute;n actual de 
+   * lectura del m_vBuffer.
    */
   int n = static_cast<int>(m_vBuffer.size());
   m_iComp++;
@@ -61,6 +61,13 @@ bool lzw::readChar(byte &c) {
   return true;
 }
 
+/**
+ * M&eacute;todo que accede al fichero File, y escribe en este el 
+ * c&oacute;digo que se le pasa por par&aacute;metro.
+ *
+ * \param[out] File Referencia del fichero de escritura.
+ * \param[in] Codigo codw
+ */
 void lzw::writeCodw (ofstream &File, codw Codigo) {
   vector<byte> aux = codw2byte(Codigo);
   int n = static_cast<int>(aux.size());
@@ -123,7 +130,7 @@ void lzw::debug(int buffer) {
 }
 
 /**
- * M&eacute;todo que lee el fichero a comprimir, y además contruye el diccionario 
+ * M&eacute;todo que lee el fichero a comprimir, y adem&aacute;s contruye el diccionario 
  * inicial.
  *
  * \param[in] sFile Direcci&oacute;n donde se encuentra el fichero a comprimir.
@@ -256,7 +263,8 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
     iCodigo = readCodw(fileIn);
     if (m_vTablaCod.find(iCodigo) != m_vTablaCod.end()) {
       /**
-       * Caso en el que est&aacute; en la tabla.
+       * Hay que tener en cuenta el caso en el que el &iacute;ndice 
+       * leido est&aacute; en la tabla.
        */
       list<byte> lTmp = m_vTablaCod[iCodigo];
       for (list<byte>::iterator it = lTmp.begin();
@@ -273,7 +281,7 @@ void lzw::uncompress (string sFileIn, string sFileOut) {
       m_vTablaCodInv[lTmp2]= index;
     } else {
       /**
-       * Caso en el que NO est&aacute; en la tabla.
+       * Y el caso en el que NO est&aacute; en la tabla.
        */
       list<byte> lTmp = m_vTablaCod[iCodigoAnterior];
       lTmp.push_back(lTmp.front());

@@ -10,9 +10,10 @@
 using namespace std;
 
 /**
- * Clase que implementa la compresion de ficheros por el metodo de dicionario
+ * Clase que implementa la compresi&oacute;n de ficheros por el metodo de dicionario
  * LZ77.
- * \author Iván Rodriguez Sastre & Marcos Gabarda Inat
+ * \author Iv&aacute;n Rodr&iacute;guez Sastre 
+ * \author Marcos Gabarda Inat
  */
 class lz77 {
  private:
@@ -23,12 +24,12 @@ class lz77 {
   vector<byte> m_vBuffer;
 
   /**
-   * Índices de la ventana de compresión
+   * &Iacute;ndices de la ventana de compresi&oacute;n
    */
   int m_iIni, m_iFin;
 
   /**
-   * Tamaño de la ventana
+   * Tama&ntilde;o de la ventana
    */
   int m_nVentana;
 
@@ -38,8 +39,8 @@ class lz77 {
   vector<cod77> vTablaCod;
 
   /**
-   * Procesa la siguiente tupla cod77 que se genera en función de la posición
-   * de la ventana actual.
+   * Procesa la siguiente tupla cod77 que se genera en funci&oacute;n de la 
+   * posici&oacute;n de la ventana actual.
    */
   cod77 obtenerTupla();
 

@@ -1,10 +1,12 @@
 #include "utils.h"
 
 /**
- * Convierte de un binario, repersentado por una cadena de caracteres 0 y 1, a un 
- * unsigned char, con la codificacion correspondiente en binario real. La secuencia
- * tiene que ser exactamente de 8 caracteres.
- * \author Iv·n Rodriguez Sastre & Marcos Gabarda Inat
+ * Convierte de un binario, repersentado por una cadena de caracteres 0 y 1, 
+ * a un unsigned char, con la codificacion correspondiente en binario real. 
+ * La secuencia tiene que ser exactamente de 8 caracteres.
+ *
+ * \author Iv&aacute;n Rodr&iacute;guez Sastre
+ * \author Marcos Gabarda Inat
  * \param sSecuencia string
  * \return unsigned char
  */
@@ -32,8 +34,9 @@ byte bin2char(string sSecuencia) {
 /**
  * Convierte de un unsigned char a un binario, representado por una 
  * cadena de 0's y 1's, con la codificacion correspondiente en binario real.
- * \author Iv·n Rodriguez Sastre & Marcos Gabarda Inat
- * \param cData unsigned char
+ * \author Iv&aacute;n Rodr&iacute;guez Sastre
+ * \author Marcos Gabarda Inat
+ * \param[in] cData unsigned char
  * \return string
  */
 string char2bin(byte cData) {
@@ -61,6 +64,17 @@ string char2bin(byte cData) {
   }
 }
 
+/**
+ * Convierte de un codigo codw en un vector de bytes
+ * usando desplazamientos a derechas. Los vectores de
+ * bytes tienen el primer byte que indica el n&uacute;mero de 
+ * bytes que hay a continuaci&oacute;n.
+ *
+ * \author Iv&aacute;n Rodr&iacute;guez Sastre
+ * \author Marcos Gabarda Inat
+ * \param[in] Codigo codw
+ * \return vector<byte>
+ */
 vector<byte> codw2byte(codw Codigo) {
   int n = static_cast<int>(sizeof(codw));
   codw MASK = 0xff;
@@ -83,6 +97,19 @@ vector<byte> codw2byte(codw Codigo) {
   return vResultFinal;  
 }
 
+/**
+ * Convierte de un vector de bytes en un codw, usando
+ * desplazamientos a izquierda. No tiene en cuenta el primer
+ * byte que se guarda para indicar el n&uacute;mero de bytes
+ * que aparecen a continuaci&oacute;n, y se supone que ya se 
+ * ha extraido y el vector que se le pasa por par&aacute;metro
+ * esta correctamente montado.
+ *
+ * \author Iv&aacute;n Rodr&iacute;guez Sastre
+ * \author Marcos Gabarda Inat
+ * \param[in] Codigo codw
+ * \return vector<byte>
+ */
 codw byte2codw(vector<byte> Codigo) {
   int n = static_cast<int>(Codigo.size());
   codw res = 0;

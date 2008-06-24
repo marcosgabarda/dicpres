@@ -52,7 +52,7 @@ class lz78 {
 
   /**
    * \var mTablaCod 
-   * Mapa donde se almacena una relaciÛn lista de chars - indice.
+   * Mapa donde se almacena una relaci&oacute;n lista de chars - indice.
    * El &iacute;ndice se utilizar&aacute; para acceder al vector vTablaCod sin recorrerlo. 
    */
   map<list<byte>,int> mTablaCod;
