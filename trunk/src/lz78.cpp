@@ -1,12 +1,29 @@
 #include "lz78.h"
 #include "utils.h"
 
+/**
+ * Constructor. Inicializa las variables necesarias para la compresión dinámica.
+ */
 lz78::lz78(){
+
+/**
+ * Se inicializan los atributos de la clase:
+ * -&Iacute;ndice de compresi&oacute;n.
+ * -&Iacute;ndice de relaci&oacute;n entre el mapa y el vector de la clase.
+ * -Cuenta del n&uacute;mero de bits necesarios para codificar.
+ */
   iComp=-1;
   iIndice=1;
   cuentaIndi=1;
 }
 
+/**
+ * M&eacute;todo que lee un byte del vBuffer.
+ *
+ * \param[out] c Byte leido.
+ * \return True en caso de que se haya leido un byte correctamente, y false
+ * false en caso contrario.
+ */
 bool lz78::readChar(byte &c){
   int n = static_cast<int>(vBuffer.size());
   iComp++;
@@ -16,11 +33,12 @@ bool lz78::readChar(byte &c){
 }
 
 /**
- * Convierte de un binario, representado por una cadena de caracteres 0 y 1, a un 
- * entero, con la codificacion correspondiente en binario real. 
+ * Convierte de un binario, representado por una cadena de caracteres 0 y 1,
+ * a un entero, con la codificaci&oacute;n correspondiente en binario real.
+ * 
  * \author Iv&aacute;n Rodr&iacute;guez Sastre
  * \author Marcos Gabarda Inat
- * \param sSecuencia string
+ * \param[in] sSecuencia string
  * \return unsigned char
  */
 int lz78::bin2int(string sSecuencia) {
@@ -44,12 +62,13 @@ int lz78::bin2int(string sSecuencia) {
 
 /**
  * Convierte de un unsigned int a un binario, representado por una 
- * cadena de 0's y 1's, con la codificacion correspondiente en binario real
- * de tamaÒo log(cuentaIndi)/log(2) (número de bits
+ * cadena de 0s y 1s, con la codificaci&oacute;n correspondiente en binario real
+ * de tama&ntilde;o log(cuentaIndi)/log(2) (n&uacute;mero de bits
  * necesarios para codificar el entero).
+ *
  * \author Iv&aacute;n Rodr&iacute;guez Sastre
  * \author Marcos Gabarda Inat
- * \param iData int
+ * \param[in] iData int
  * \return string
  */
 string lz78::int2bin(int iData) {
@@ -87,9 +106,10 @@ string lz78::int2bin(int iData) {
 
 
 /**
- * M&eacute;todo que lee el fichero a comprimir, y además contruye el diccionario 
- * inicial.
- * \param sFile Direcci&oacute;n donde se encuentra el fichero a comprimir.
+ * M&eacute;todo que lee el fichero a comprimir, y adem&aacute;s contruye el 
+ * diccionario inicial.
+ *
+ * \param[in] sFile Direcci&oacute;n donde se encuentra el fichero a comprimir.
  */
 void lz78::readFile(string sFile) {
 
@@ -107,8 +127,10 @@ void lz78::readFile(string sFile) {
 }
 
 /**
- * M&eacute;todo que comprime con LZ78.
- * \param sFile Direcci&oacute;n donde se dejara el fichero comprimido.
+ * M&eacute;todo que implementa el algoritmo de copresi&oacute;n.
+ *
+ * \param[in] sFile Direcci&oacute;n donde se dejar&aacute; el fichero
+ * comprimido.
  */
 void lz78::compress(string sFile){
   byte c;
@@ -121,11 +143,9 @@ void lz78::compress(string sFile){
       mTablaCod[cadena]=iIndice;
       string indi;
       if(cadena.size()==1)
-	//vTablaCod.push_back(cod78(0,c));
 	indi = int2bin(0);
       else{
 	cadena.pop_back();
-	//vTablaCod.push_back(cod78(mTablaCod[cadena],c));
 	indi = int2bin(mTablaCod[cadena]);
       }
 			
@@ -149,6 +169,12 @@ void lz78::compress(string sFile){
   file.close();
 }
 
+/**
+ * M&eacute;todo que lee el fichero con la informaci&oacute;n comprimida y
+ * rellena la tabla con los elementos codificados en formato LZ78.
+ *
+ * \param[in] sFile Fichero con la informaci&oacute; comprimida.
+ */
 void lz78::readCom(string sFile) {
 
   ifstream file(sFile.c_str(), ifstream::binary);
@@ -180,16 +206,20 @@ void lz78::readCom(string sFile) {
   file.close(); 
 }
 
+/**
+ * M&eacute;todo que recupera una lista de bytes a partir del vector
+ * donde est&aacute; almacenada la informaci&oacute; codificada.
+ *
+ * \param[out] cadena Lista de bytes obtenidos.
+ * \param[out] i &Iacute;ndice de acceso al vector de informaci&oacute;.
+ */
 void lz78::obtainElem(list<byte> &cadena, int &i){
-  //cerr<<"Obtain "<<i<<endl;
   int indi = static_cast<int>(vTablaCod[i].first);
   if(indi==0){
-    //cerr<<"indi 0. i "<<i<<endl;
     cadena.push_back(vTablaCod[i].second);
     return;
   }
   else{
-    //cerr<<"indi "<< indi<<". i "<<i<<endl;
     int nuevoindi= indi-1;
     obtainElem(cadena,nuevoindi);
     cadena.push_back(vTablaCod[i].second);
@@ -198,19 +228,17 @@ void lz78::obtainElem(list<byte> &cadena, int &i){
 }
 
 /**
- * M&eacute;todo que descomprime un fichero LZ78.
- * \param sFile Dirección donde se dejara el fichero descomprimido.
+ * M&eacute;todo que implementa el algoritmo de descopresi&oacute;n.
+ *
+ * \param[in] sFile Direcci&oacute;n donde se dejar&aacute; el fichero
+ * descomprimido.
  */
 void lz78::uncompress(string sFile){
   list <byte> cadena;
   ofstream file(sFile.c_str(), ofstream::binary);
-  //cout<<"Size: "<<vTablaCod.size()<<endl;
   int tamTabla = static_cast<int>(vTablaCod.size());
   for(int i=0; i< tamTabla; i++){
-    //cout<<i<<endl;
-    //cerr<<"Antes obtain "<<i<<endl;
     obtainElem(cadena,i);
-    //cerr<<"Tras obtain "<<i<<endl;
     for(list<byte>::iterator it = cadena.begin(); it!=cadena.end(); it++){
       char buffer[1];
       buffer[0]=static_cast<char>(*it);
