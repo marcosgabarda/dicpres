@@ -13,7 +13,18 @@ lz77::lz77(int nVentana) {
 }
 
 /**
- * Leer un fichero de fuente.
+ * M&eacute;todo para mostrar mensajes de error, y terminar la ejecuci&oacute;n 
+ * del programa.
+ *
+ * \param[in] msg Mensaje de error para mostrar.
+ */
+void lz77::error(string msg) {
+  cerr << "[Error] "<< msg << endl;
+  exit(-1);
+}
+
+/**
+ * Leer un fichero de fuente y almacena el contenido en memoria.
  *
  * \param[in] sFile Direcci&oacute;n del fichero fuente que va a leer.
  */
@@ -33,6 +44,21 @@ void lz77::readFile(string sFile) {
 }
 
 /**
+ * M&eacute;todo que accede al fichero File, y escribe en este el 
+ * c&oacute;digo que se le pasa por par&aacute;metro. 
+ *
+ * \param[in, out] File Referencia del fichero de escritura.
+ * \param[in] Codigo cod77
+ */
+void lz77::writeCod77(ofstream &File, cod77 Codigo) {
+  char buffer[3];
+  buffer[0] = static_cast<char>(Codigo.first.first);
+  buffer[1] = static_cast<char>(Codigo.first.second);
+  buffer[2] = static_cast<char>(Codigo.second);
+  File.write(buffer, 3);
+}
+
+/**
  * M&eacute;todo que implementa el algoritmo de compresi&oacute;n.
  * 
  * \param[in] sFileIn Direcci&oacute;n del fichero fuente.
@@ -42,6 +68,7 @@ void lz77::readFile(string sFile) {
 void lz77::compress (string sFileIn, string sFileOut) {
   
   ofstream file(sFileOut.c_str(), ofstream::binary);
+  if (!file.is_open()) error (string("No se pudo abrir el archivo de destino: ") + sFileOut);
 
   readFile(sFileIn);
 
@@ -53,8 +80,8 @@ void lz77::compress (string sFileIn, string sFileOut) {
   file.write(buffer, 1);
 
   /**
-   * Primera fase. Creaci&oacute;n de la ventana inicial de 
-   * busqueda.
+   * - Primera fase. Creaci&oacute;n de la ventana inicial de 
+   *   busqueda.
    */
   unsigned int i;
   for (i = m_iIni; i < static_cast<unsigned int>(m_nVentana) && i < nBuffer; i++) {    
@@ -66,7 +93,8 @@ void lz77::compress (string sFileIn, string sFileOut) {
   if ( i == nBuffer) return;
 
   /**
-   * Segunda parte.
+   * - Segunda parte. Generar las tuplas de la compresi&oacute;n por 
+   *   lz77.
    */
   for ( i = m_iFin + 1; i < nBuffer; i++) {
     byte c = m_vBuffer[i];
@@ -77,12 +105,12 @@ void lz77::compress (string sFileIn, string sFileOut) {
     unsigned int d = 0;
     unsigned int tam = 0;
 
-    while (iIndex_tmp <= m_iFin) {
+    while (iIndex_tmp <= static_cast<unsigned int>(m_iFin)) {
       
       unsigned int i_tmp = i + 1;
       
       /**
-       * Se busca la primera coincidencia del siguiente caracter a comprimir
+       * En primer lugar se busca la primera coincidencia del siguiente caracter a comprimir
        * dentro del buffer de b&uacute;squeda.
        */
       for (iIndex = iIndex_tmp ; iIndex < static_cast<unsigned int>(m_iFin); iIndex++) {
@@ -96,7 +124,7 @@ void lz77::compress (string sFileIn, string sFileOut) {
       unsigned int d_tmp = iIndex - m_iIni;
 
       /**
-       * Se busca la primera diferencia, que indicar&aacute; el final del prefijo
+       * Luego se busca la primera diferencia, que indicar&aacute; el final del prefijo
        * m&aacute;s largo encontrado.
        */
       for (iIndex = m_iIni + d_tmp; iIndex < nBuffer; iIndex++, i_tmp++) {
@@ -108,7 +136,7 @@ void lz77::compress (string sFileIn, string sFileOut) {
       unsigned int tam_tmp = iIndex - (m_iIni + d_tmp);      
 
       /**
-       * M&aacute;ximo tama&ntilde;o de prefijo.
+       * Y nos quedamos con el prefijo de m&aacute;ximo tama&ntilde;o.
        */
       if (tam_tmp > tam) {
 	tam = tam_tmp + 1;
@@ -121,13 +149,9 @@ void lz77::compress (string sFileIn, string sFileOut) {
 
     /**
      * Escribir la tupla del lz77 en el fichero de salida.
-     */     
-    char buffer[3];
-    buffer[0] = static_cast<char>(d);
-    buffer[1] = static_cast<char>(tam);
-    buffer[2] = static_cast<char>(c);
-    file.write(buffer, 3);
-    
+     */
+    writeCod77(file, aux);
+
     /**
      * Actualizamos la posici&oacute;n de la ventana.
      */
@@ -136,4 +160,15 @@ void lz77::compress (string sFileIn, string sFileOut) {
   }
 
   file.close();
+}
+
+/**
+ * M&eacute;todo que implementa el algoritmo de descopresi&oacute;n.
+ *
+ * \param[in] sFileIn Direcci&oacute;n del fichero que se quiere descomprimir.
+ * \param[in] sFileOut Direcci&oacute;n donde se dejara el fichero descomprimido.
+ * \todo Implementar.
+ */
+void lz77::uncompress (string sFileIn, string sFileOut) {
+  return;
 }

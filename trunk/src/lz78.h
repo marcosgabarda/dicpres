@@ -1,13 +1,13 @@
 #ifndef _LZ78_H
 #define _LZ78_H
 
-#include <string>
-#include <vector>
 #include "types.h"
 
 using namespace std;
 
 /**
+ * \class lz78
+ *
  * Clase que implementa la compresi&oacute;n de ficheros por el m&eacute;todo de
  * dicionario LZ78.
  *
@@ -17,7 +17,7 @@ using namespace std;
  *
  * Para comprimir y descomprimir, respectivamente.
  *
- * \date Julio 2008
+ * \date Junio 2008
  * \author Iv&aacute;n Rodr&iacute;guez Sastre
  * \author Marcos Gabarda Inat
  */
@@ -62,6 +62,8 @@ class lz78 {
    * &Iacute;ndice del mapa y del vector
    */
   int iIndice;
+
+  void error(string msg);
 
  public:
   lz78(); 

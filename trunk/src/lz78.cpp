@@ -23,6 +23,18 @@ lz78::lz78(){
 }
 
 /**
+ * M&eacute;todo para mostrar mensajes de error, y terminar la ejecuci&oacute;n 
+ * del programa.
+ *
+ * \param[in] msg Mensaje de error para mostrar.
+ */
+void lz78::error(string msg) {
+  cerr << "[Error] "<< msg << endl;
+  exit(-1);
+}
+
+
+/**
  * M&eacute;todo que lee un byte del vBuffer.
  *
  * \param[out] c Byte leido.
@@ -41,8 +53,6 @@ bool lz78::readChar(byte &c){
  * Convierte de un binario, representado por una cadena de caracteres 0 y 1,
  * a un entero, con la codificaci&oacute;n correspondiente en binario real.
  * 
- * \author Iv&aacute;n Rodr&iacute;guez Sastre
- * \author Marcos Gabarda Inat
  * \param[in] sSecuencia string
  * \return unsigned char
  */
@@ -71,8 +81,6 @@ int lz78::bin2int(string sSecuencia) {
  * de tama&ntilde;o log(cuentaIndi)/log(2) (n&uacute;mero de bits
  * necesarios para codificar el entero).
  *
- * \author Iv&aacute;n Rodr&iacute;guez Sastre
- * \author Marcos Gabarda Inat
  * \param[in] iData int
  * \return string
  */
@@ -119,6 +127,8 @@ string lz78::int2bin(int iData) {
 void lz78::readFile(string sFile) {
 
   ifstream file(sFile.c_str(), ifstream::binary);
+  if (!file.is_open()) error (string("No se pudo abrir el archivo de origen: ") + sFile);
+
   byte cCaracter;
   char buffer[1];
 
@@ -141,6 +151,7 @@ void lz78::compress(string sFile){
   byte c;
   list<byte> cadena;
   ofstream file(sFile.c_str(),ofstream::binary);
+  if (!file.is_open()) error (string("No se pudo abrir el archivo de destino: ") + sFile);
 	
   while((readChar(c))){
     cadena.push_back(c);

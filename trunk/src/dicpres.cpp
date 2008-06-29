@@ -24,6 +24,25 @@ using namespace std;
  *
  * </ul>
  *
+ * \section install Compilar
+ *
+ * Para compilar el programa principal basta con ejecutar: <br>
+ * <code>
+ * $make
+ * </code>
+ *
+ * Para compilar los programas de pruebas hay que ejecutar: <br>
+ *
+ * <code>
+ * $make test
+ * </code>
+ *
+ * o
+ * <code>
+ * $cd test
+ * $make
+ * </code>
+ *
  * \section help Ejecuci&oacute;n
  *
  * Modo de empleo del programa principal:

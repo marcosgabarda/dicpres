@@ -17,7 +17,7 @@ using namespace std;
  *
  * Para comprimir y descomprimir, respectivamente.
  *
- * \date Julio 2008
+ * \date Junio 2008
  * \author Iv&aacute;n Rodr&iacute;guez Sastre
  * \author Marcos Gabarda Inat
  *
@@ -59,6 +59,12 @@ class lzw {
    */
   map<list<byte>, codw> m_vTablaCodInv;
 
+  /**
+   * \var iLimit
+   * Tama&ntilde;o l&iacute;mite del diccionario inicial. 
+   */
+  static const unsigned int iLimit = 256;
+
   void init();
 
   bool readChar(byte &c);
@@ -71,7 +77,7 @@ class lzw {
   void debug(string buffer);
   void debug(int buffer);
 
-  static const unsigned int iLimit = 256;
+  void error(string msg);
 
  public:
   

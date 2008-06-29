@@ -7,7 +7,7 @@ LDLIBS=-lm
 DEBUG=-g
 
 all: dicpres
-	@echo "### Generando documentacion ###"
+#	@echo "### Generando documentacion ###"
 #	doxygen Doxyfile
 
 dicpres: utils.o lzw.o lz78.o
@@ -45,5 +45,5 @@ lz77.o:
 	$(CXX) -c $(SOURCES)/lz77.cpp -o $(LIBS)/$@ $(CXXFLAGS) -g
 
 clean:
-	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~ dicpres $(SOURCES)/*~
+	$(RM) *~ $(TEST)/test_lzw $(TEST)/test_lz77 $(TEST)/test_lz78 $(TEST)/untest_lz78 $(TEST)/untest_lzw $(LIBS)/*.o $(TEST)/*~ dicpres $(SOURCES)/*~
 	$(RM) -r doc/*
