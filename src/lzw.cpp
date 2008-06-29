@@ -12,6 +12,17 @@ lzw::lzw(bool bVerbose) {
 }
 
 /**
+ * M&eacute;todo para mostrar mensajes de error, y terminar la ejecuci&oacute;n 
+ * del programa.
+ *
+ * \param[in] msg Mensaje de error para mostrar.
+ */
+void lzw::error(string msg) {
+  cerr << "[Error] "<< msg << endl;
+  exit(-1);
+}
+
+/**
  * Inicializa los valores de la clase.
  */
 void lzw::init() {
@@ -65,7 +76,7 @@ bool lzw::readChar(byte &c) {
  * M&eacute;todo que accede al fichero File, y escribe en este el 
  * c&oacute;digo que se le pasa por par&aacute;metro.
  *
- * \param[out] File Referencia del fichero de escritura.
+ * \param[in, out] File Referencia del fichero de escritura.
  * \param[in] Codigo codw
  */
 void lzw::writeCodw (ofstream &File, codw Codigo) {
@@ -138,6 +149,7 @@ void lzw::debug(int buffer) {
 void lzw::readSource (string sFile) {
 
   ifstream file(sFile.c_str(), ifstream::binary);
+  if (!file.is_open()) error (string("No se pudo abrir el archivo de origen: ") + sFile);
 
   byte cCaracter;
   char buffer[1];
@@ -169,7 +181,8 @@ void lzw::compress (string sFileIn, string sFileOut) {
 
   debug(string("Fichero de salida: ") + sFileOut );
   ofstream file(sFileOut.c_str(), ofstream::binary);
-  
+  if (!file.is_open()) error (string("No se pudo abrir el archivo de destino: ") + sFileOut);
+
   vector<codw> vBufferSalida;
 
   list<byte> sCadena;
