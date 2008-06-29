@@ -31,6 +31,8 @@ void lz77::error(string msg) {
 void lz77::readFile(string sFile) {
 
   ifstream file(sFile.c_str(), ifstream::binary);
+  if (!file.is_open()) error (string("No se pudo abrir el archivo de origen: ") + sFile);
+
   byte cCaracter;
   char buffer[1];
 
@@ -98,6 +100,8 @@ void lz77::compress (string sFileIn, string sFileOut) {
    */
   for ( i = m_iFin + 1; i < nBuffer; i++) {
     byte c = m_vBuffer[i];
+    byte c_tmp = c;
+    byte c_mejor = c;
 
     unsigned int iIndex = m_iIni;
     unsigned int iIndex_tmp = m_iIni;
@@ -105,10 +109,10 @@ void lz77::compress (string sFileIn, string sFileOut) {
     unsigned int d = 0;
     unsigned int tam = 0;
 
-    while (iIndex_tmp <= static_cast<unsigned int>(m_iFin)) {
-      
-      unsigned int i_tmp = i + 1;
-      
+    unsigned i_mejor = i;
+
+    while (iIndex_tmp <= static_cast<unsigned int>(m_iFin)) {      
+
       /**
        * En primer lugar se busca la primera coincidencia del siguiente caracter a comprimir
        * dentro del buffer de b&uacute;squeda.
@@ -118,32 +122,44 @@ void lz77::compress (string sFileIn, string sFileOut) {
 	  break;
 	}
       }
-      if (iIndex == static_cast<unsigned int>(m_iFin)) break;
+      if (iIndex == static_cast<unsigned int>(m_iFin)) {	
+	break;
+      }
 
-      iIndex_tmp = iIndex;
       unsigned int d_tmp = iIndex - m_iIni;
 
       /**
        * Luego se busca la primera diferencia, que indicar&aacute; el final del prefijo
        * m&aacute;s largo encontrado.
        */
-      for (iIndex = m_iIni + d_tmp; iIndex < nBuffer; iIndex++, i_tmp++) {
-	c = m_vBuffer[i_tmp];
-	if (m_vBuffer[iIndex] != c) {
+      unsigned int i_tmp = i;
+      for (iIndex = m_iIni + d_tmp + 1; iIndex < nBuffer; iIndex++, i_tmp++) {
+	c_tmp = m_vBuffer[i_tmp + 1];
+	if (m_vBuffer[iIndex] != c_tmp) {
 	  break;
 	}
       }
+
+      /**
+       * Nos guardamos el indice por donde nos hemos quedado.
+       */
+      iIndex_tmp = iIndex;
+
       unsigned int tam_tmp = iIndex - (m_iIni + d_tmp);      
 
       /**
        * Y nos quedamos con el prefijo de m&aacute;ximo tama&ntilde;o.
        */
       if (tam_tmp > tam) {
-	tam = tam_tmp + 1;
-	d = d_tmp - 1;
-	i = i_tmp;
+	tam = tam_tmp;
+	d = d_tmp;
+	i_mejor = i_tmp + 1;
+	c_mejor = c_tmp;
       }
     }      
+
+    i = i_mejor;
+    c = c_mejor;
 
     cod77 aux = pair<pair<unsigned int, unsigned int>, byte>(pair<unsigned int, unsigned int>(d, tam),c);
 
@@ -151,6 +167,9 @@ void lz77::compress (string sFileIn, string sFileOut) {
      * Escribir la tupla del lz77 en el fichero de salida.
      */
     writeCod77(file, aux);
+
+    //    cout << "(" << d << ", " << tam << ", cod(" << c << "))" << endl;
+
 
     /**
      * Actualizamos la posici&oacute;n de la ventana.
