@@ -7,6 +7,7 @@
  * \param[in] nVentana Tama&ntilde;o de la ventana.
  */
 lz77::lz77(int nVentana) {
+  if (nVentana > 256) error(string("El tamaño máximo de ventana es de 256."));
   m_nVentana = nVentana;
   m_iIni = 0;
   m_iFin = nVentana - 1;
@@ -167,9 +168,6 @@ void lz77::compress (string sFileIn, string sFileOut) {
      * Escribir la tupla del lz77 en el fichero de salida.
      */
     writeCod77(file, aux);
-
-    //    cout << "(" << d << ", " << tam << ", cod(" << c << "))" << endl;
-
 
     /**
      * Actualizamos la posici&oacute;n de la ventana.
