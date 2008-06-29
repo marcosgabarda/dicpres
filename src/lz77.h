@@ -62,8 +62,6 @@ class lz77 {
  public:
 
   lz77(int nVentana = DEFAULT_WINDOW);
-
-  ~lz77();
   
   void compress (string sFileIn, string sFileOut);
   

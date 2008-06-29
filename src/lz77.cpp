@@ -47,13 +47,17 @@ void lz77::compress (string sFileIn, string sFileOut) {
 
   unsigned int nBuffer = static_cast<unsigned int>(m_vBuffer.size());
   
-  file << nBuffer;
+  char tmp = static_cast<char>(nBuffer);
+  char buffer[1];
+  buffer[0] = tmp;
+  file.write(buffer, 1);
 
   /**
    * Primera fase. Creaci&oacute;n de la ventana inicial de 
    * busqueda.
    */
-  for (int i = m_iIni; i < m_nVentana && i < nBuffer; i++) {    
+  unsigned int i;
+  for (i = m_iIni; i < static_cast<unsigned int>(m_nVentana) && i < nBuffer; i++) {    
     char tmp = static_cast<char>(m_vBuffer[i]);
     char buffer[1];
     buffer[0] = tmp;
@@ -61,47 +65,75 @@ void lz77::compress (string sFileIn, string sFileOut) {
   }
   if ( i == nBuffer) return;
 
-  for (int i = m_iFin + 1; i < nBuffer; i++) {
+  /**
+   * Segunda parte.
+   */
+  for ( i = m_iFin + 1; i < nBuffer; i++) {
     byte c = m_vBuffer[i];
-    if (c != m_vBuffer[i - m_nVentana]) {
-      unsigned int tam =;
-      unsigned int d =;
-      cod77 aux = pair(pair(d,tam),c);
+
+    unsigned int iIndex = m_iIni;
+    unsigned int iIndex_tmp = m_iIni;
+
+    unsigned int d = 0;
+    unsigned int tam = 0;
+
+    while (iIndex_tmp <= m_iFin) {
+      
+      unsigned int i_tmp = i + 1;
       
       /**
-       * \todo Emitir aux.
+       * Se busca la primera coincidencia del siguiente caracter a comprimir
+       * dentro del buffer de b&uacute;squeda.
        */
-      
-      m_iIni += 1;
-      m_iFin += 1;
-    } else {
-    }      
-    
-  }
-
-  while (m_iFin + 1 < nBuffer) {
-
-    byte c = m_vBuffer[m_iFin + 1];
-
-    for (int i = m_iIni; ; ) {
-      if (m_vBuffer[i] != c) {      
-	unsigned int tam = i - m_iIni;
-	unsigned int d = m_iIni;
-	cod77 aux = pair(pair(d,tam),c);
-
-	/**
-	 * \todo Emitir aux.
-	 */
-
-	m_iIni += 1;
-	m_iFin += 1;
-	break;
-      } else {
-	m_iIni++;
-	m_iFin++;
+      for (iIndex = iIndex_tmp ; iIndex < static_cast<unsigned int>(m_iFin); iIndex++) {
+	if (m_vBuffer[iIndex] == c) {
+	  break;
+	}
       }
-      i = m_iIni;
-    }
+      if (iIndex == static_cast<unsigned int>(m_iFin)) break;
+
+      iIndex_tmp = iIndex;
+      unsigned int d_tmp = iIndex - m_iIni;
+
+      /**
+       * Se busca la primera diferencia, que indicar&aacute; el final del prefijo
+       * m&aacute;s largo encontrado.
+       */
+      for (iIndex = m_iIni + d_tmp; iIndex < nBuffer; iIndex++, i_tmp++) {
+	c = m_vBuffer[i_tmp];
+	if (m_vBuffer[iIndex] != c) {
+	  break;
+	}
+      }
+      unsigned int tam_tmp = iIndex - (m_iIni + d_tmp);      
+
+      /**
+       * M&aacute;ximo tama&ntilde;o de prefijo.
+       */
+      if (tam_tmp > tam) {
+	tam = tam_tmp + 1;
+	d = d_tmp - 1;
+	i = i_tmp;
+      }
+    }      
+
+    cod77 aux = pair<pair<unsigned int, unsigned int>, byte>(pair<unsigned int, unsigned int>(d, tam),c);
+
+    /**
+     * Escribir la tupla del lz77 en el fichero de salida.
+     */     
+    char buffer[3];
+    buffer[0] = static_cast<char>(d);
+    buffer[1] = static_cast<char>(tam);
+    buffer[2] = static_cast<char>(c);
+    file.write(buffer, 3);
+    
+    /**
+     * Actualizamos la posici&oacute;n de la ventana.
+     */
+    m_iFin = i;
+    m_iIni = m_iFin - (m_nVentana - 1);
   }
 
+  file.close();
 }
